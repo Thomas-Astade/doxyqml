@@ -5,15 +5,8 @@
 Doxyqml turns .qml into pseudo-C++ which Doxygen can then use to generate
 documentation.
 
-# Installing
-
-Doxyqml uses the standard Python setup tools, so you can install it with pip:
-
-    pip3 install doxyqml
-
-or manually with:
-
-    python3 setup.py install
+This project is a clone of the original python project https://github.com/agateau/doxyqml
+It is intented to be compatible, but it is a complete redevelopment in C++
 
 # Telling Doxygen to use Doxyqml
 
