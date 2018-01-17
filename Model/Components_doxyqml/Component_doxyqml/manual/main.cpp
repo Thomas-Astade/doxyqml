@@ -21,8 +21,8 @@ namespace ascii = boost::spirit::ascii;
 /* This structure is used by main to communicate with parse_opt. */
 struct Arguments
 {
-    Arguments(): verbose(false) {}
-    bool verbose;
+    Arguments(): debug(false) {}
+    bool debug;
 };
 
 Arguments arguments;
@@ -87,7 +87,7 @@ const char *argp_program_bug_address =
 
 static struct argp_option options[] =
 {
-  {"verbose", 'v', 0,            0, "verbose info aboout parsing."},
+  {"debug", 'd', 0,            0, "Log debug info to stderr"},
   {0}
 };
 
@@ -97,9 +97,20 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 
     switch (key)
     {
-    case 'v':
-        arguments->verbose = true;
+    case 'd':
+        arguments->debug = true;
         break;
+    case ARGP_KEY_ARG:
+        if (state->arg_num >= 1)
+            argp_usage (state);
+        else
+            printf(">>>%s<<<\n",arg);
+        break;
+    case ARGP_KEY_END:
+      if (state->arg_num < 1)
+        /* Not enough arguments. */
+        argp_usage (state);
+      break;
     default:
         return ARGP_ERR_UNKNOWN;
     }
@@ -109,7 +120,10 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 static char doc[] =
 "doxyqml -- A program to convert qml to pseudo C++ for doxygen.";
 
-static struct argp argp = {options, parse_opt, 0, doc};
+/* A description of the arguments we accept. */
+static char args_doc[] = "qml_file";
+
+static struct argp argp = {options, parse_opt, args_doc, doc};
 
 int main (int argc, char **argv)
 {
