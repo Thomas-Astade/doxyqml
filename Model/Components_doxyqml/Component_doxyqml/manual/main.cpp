@@ -7,25 +7,31 @@
 #include <iomanip>
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/classic_position_iterator.hpp>
+#include <boost/spirit/repository/include/qi_confix.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 #include <boost/spirit/include/qi_action.hpp>
 
 #include "CRootElement.h"
+#include "CQmlObject.h"
 
 namespace classic = boost::spirit::classic;
 namespace qi = boost::spirit::qi;
 namespace ascii = boost::spirit::ascii;
+
+using boost::spirit::repository::confix;
 
 /* This structure is used by main to communicate with parse_opt. */
 struct Arguments
 {
     Arguments(): debug(false) {}
     bool debug;
+    std::string filename;
 };
 
 Arguments arguments;
+std::vector<doxyqml::CQmlObject*> gObjectStack; // holds the current objets during parsing
 
 template <typename Iterator>
 struct qml_parser
@@ -33,11 +39,14 @@ struct qml_parser
 {
     qml_parser() : qml_parser::base_type(rootElements)
     {
-        rootElements = *(qi::char_("a-zA-Z_") > space);
+        rootElements = *(multilineComment | (qi::char_("a-zA-Z_") > space));
         
         space = *(qi::lit(' ') | qi::lit('\n') | qi::lit('\t'));
+
+        multilineComment = confix("/*", "*/")[*(qi::char_ - "*/")];
     }
     
+    qi::rule<Iterator> multilineComment;
     qi::rule<Iterator> rootElements;
     qi::rule<Iterator> space;
 };
@@ -60,7 +69,8 @@ bool load(const std::string& filename)
         pos_iterator_type position_begin(begin, end, filename.c_str());
         pos_iterator_type position_end;
 
-        qml_parser<pos_iterator_type> p;       // create instance of parser
+        qml_parser<pos_iterator_type> p;                                // create instance of parser
+        gObjectStack.push_back(new doxyqml::CRootElement(filename));    // initialize the object stack
 
         qi::phrase_parse(position_begin, position_end, p, qi::space);
 
@@ -104,7 +114,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
         if (state->arg_num >= 1)
             argp_usage (state);
         else
-            printf(">>>%s<<<\n",arg);
+            arguments->filename = arg;
         break;
     case ARGP_KEY_END:
       if (state->arg_num < 1)
@@ -129,7 +139,9 @@ int main (int argc, char **argv)
 {
     /* Where the magic happens */
     argp_parse (&argp, argc, argv, 0, 0, &arguments);
-
-
+    if (!arguments.filename.empty())
+        load(arguments.filename);
+    if (!gObjectStack.empty())
+        gObjectStack.front()->print();
     return 0;
 }
