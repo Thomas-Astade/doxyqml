@@ -19,6 +19,7 @@
 #include "CSinglelineComment.h"
 #include "CImport.h"
 #include "CObjectDeclaration.h"
+#include "CProperty.h"
 
 namespace classic = boost::spirit::classic;
 namespace qi = boost::spirit::qi;
@@ -49,6 +50,12 @@ void add_singleline_comment(const std::string& name, const boost::spirit::unused
     gObjectStack.back()->addChild(p);
 }
 
+void add_property(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+{
+    doxyqml::CProperty* p = new doxyqml::CProperty(name);
+    gObjectStack.back()->addChild(p);
+}
+
 void add_importline(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
 {
     doxyqml::CImport* p = new doxyqml::CImport(name);
@@ -73,6 +80,7 @@ struct qml_parser
     {
         rootElements    =   *(topElement > space)
                         >   objectDeclaration
+                        >   space
                         ;
         
         comment         =   multilineComment[add_multiline_comment]
@@ -84,12 +92,16 @@ struct qml_parser
         topElement      =   comment
                         |   importLine[add_importline]
                         ;
+                        
+        objectElement   =   comment
+                        |   property[add_property]
+                        ;
         
         objectDeclaration   = uppercaseIdentifier[add_Object]
                             > space
                             > qi::lit('{')
                             > space
-                            > comments
+                            > *(objectElement > space)
                             > qi::lit('}')
                             ;
         
@@ -97,6 +109,7 @@ struct qml_parser
         multilineComment = confix("/*", "*/")[*(qi::char_ - "*/")];
         singlelineComment = confix("//", qi::eol)[*(qi::char_ - qi::eol)];
         importLine = confix("import", qi::eol)[*(qi::char_ - qi::eol)];
+        property =  confix("property", qi::eol)[*(qi::char_ - qi::eol)];
         uppercaseIdentifier = qi::char_("A-Z") > *qi::char_("_a-zA-Z0-9");
         lowercaseIdentifier = qi::char_("a-z") > *qi::char_("_a-zA-Z0-9");
     }
@@ -108,8 +121,10 @@ struct qml_parser
     qi::rule<Iterator, std::string()> lowercaseIdentifier;    
     qi::rule<Iterator> rootElements;
     qi::rule<Iterator, std::string()> topElement;
+    qi::rule<Iterator> objectElement;
     qi::rule<Iterator> space;
     qi::rule<Iterator, std::string()> objectDeclaration;
+    qi::rule<Iterator, std::string()> property;
     qi::rule<Iterator> comment;
     qi::rule<Iterator> comments;
 };
