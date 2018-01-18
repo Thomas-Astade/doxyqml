@@ -17,6 +17,7 @@
 #include "CQmlObject.h"
 #include "CMultilineComment.h"
 #include "CSinglelineComment.h"
+#include "CImport.h"
 
 namespace classic = boost::spirit::classic;
 namespace qi = boost::spirit::qi;
@@ -47,6 +48,12 @@ void add_singleline_comment(const std::string& name, const boost::spirit::unused
     gObjectStack.back()->addChild(p);
 }
 
+void add_importline(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+{
+    doxyqml::CImport* p = new doxyqml::CImport(name);
+    gObjectStack.back()->addChild(p);
+}
+
 template <typename Iterator>
 struct qml_parser
   : qi::grammar<Iterator>
@@ -57,15 +64,18 @@ struct qml_parser
         
         object          =   multilineComment[add_multiline_comment]
                         |   singlelineComment[add_singleline_comment]
+                        |   importLine[add_importline]
                         ;
         
         space = *(qi::lit(' ') | qi::lit('\n') | qi::lit('\t'));
         multilineComment = confix("/*", "*/")[*(qi::char_ - "*/")];
         singlelineComment = confix("//", qi::eol)[*(qi::char_ - qi::eol)];
+        importLine = confix("import", qi::eol)[*(qi::char_ - qi::eol)];
     }
     
     qi::rule<Iterator, std::string()> multilineComment;
     qi::rule<Iterator, std::string()> singlelineComment;
+    qi::rule<Iterator, std::string()> importLine;
     qi::rule<Iterator> rootElements;
     qi::rule<Iterator, std::string()> object;
     qi::rule<Iterator> space;
