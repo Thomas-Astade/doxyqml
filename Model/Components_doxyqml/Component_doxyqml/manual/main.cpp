@@ -15,6 +15,8 @@
 
 #include "CRootElement.h"
 #include "CQmlObject.h"
+#include "CMultilineComment.h"
+#include "CSinglelineComment.h"
 
 namespace classic = boost::spirit::classic;
 namespace qi = boost::spirit::qi;
@@ -33,21 +35,39 @@ struct Arguments
 Arguments arguments;
 std::vector<doxyqml::CQmlObject*> gObjectStack; // holds the current objets during parsing
 
+void add_multiline_comment(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+{
+    doxyqml::CMultilineComment* p = new doxyqml::CMultilineComment(name);
+    gObjectStack.back()->addChild(p);
+}
+
+void add_singleline_comment(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+{
+    doxyqml::CSinglelineComment* p = new doxyqml::CSinglelineComment(name);
+    gObjectStack.back()->addChild(p);
+}
+
 template <typename Iterator>
 struct qml_parser
   : qi::grammar<Iterator>
 {
     qml_parser() : qml_parser::base_type(rootElements)
     {
-        rootElements = *(multilineComment | (qi::char_("a-zA-Z_") > space));
+        rootElements    = *(object > space);
+        
+        object          =   multilineComment[add_multiline_comment]
+                        |   singlelineComment[add_singleline_comment]
+                        ;
         
         space = *(qi::lit(' ') | qi::lit('\n') | qi::lit('\t'));
-
         multilineComment = confix("/*", "*/")[*(qi::char_ - "*/")];
+        singlelineComment = confix("//", qi::eol)[*(qi::char_ - qi::eol)];
     }
     
-    qi::rule<Iterator> multilineComment;
+    qi::rule<Iterator, std::string()> multilineComment;
+    qi::rule<Iterator, std::string()> singlelineComment;
     qi::rule<Iterator> rootElements;
+    qi::rule<Iterator, std::string()> object;
     qi::rule<Iterator> space;
 };
 
@@ -77,6 +97,7 @@ bool load(const std::string& filename)
         if (position_begin != position_end)
             throw qi::expectation_failure<pos_iterator_type>(position_begin, position_end,boost::spirit::info("general error"));
     }
+    
     catch(const qi::expectation_failure<pos_iterator_type> e)
     {
         const classic::file_position_base<std::string>& pos = e.first.get_position();
@@ -85,6 +106,7 @@ bool load(const std::string& filename)
                     << e.what_  << std::endl;
         return false;    
     }
+    
     return true;
 }
 

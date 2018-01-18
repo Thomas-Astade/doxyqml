@@ -1,6 +1,9 @@
 /*
  * Header bla
  */
+
+// a sinle line
+
 import QtQuick 1.1
 
 /**
