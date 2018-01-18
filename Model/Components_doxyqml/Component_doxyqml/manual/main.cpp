@@ -18,6 +18,7 @@
 #include "CMultilineComment.h"
 #include "CSinglelineComment.h"
 #include "CImport.h"
+#include "CObjectDeclaration.h"
 
 namespace classic = boost::spirit::classic;
 namespace qi = boost::spirit::qi;
@@ -54,31 +55,63 @@ void add_importline(const std::string& name, const boost::spirit::unused_type& i
     gObjectStack.back()->addChild(p);
 }
 
+void add_Object(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+{
+    doxyqml::CRootElement* p = dynamic_cast<doxyqml::CRootElement*>(gObjectStack.back());
+    if (p)
+        p->setBaseClass(name);
+    doxyqml::CObjectDeclaration* o = new doxyqml::CObjectDeclaration(name);
+    gObjectStack.back()->addChild(o);
+    gObjectStack.push_back(o);
+}
+
 template <typename Iterator>
 struct qml_parser
   : qi::grammar<Iterator>
 {
     qml_parser() : qml_parser::base_type(rootElements)
     {
-        rootElements    = *(object > space);
+        rootElements    =   *(topElement > space)
+                        >   objectDeclaration
+                        ;
         
-        object          =   multilineComment[add_multiline_comment]
+        comment         =   multilineComment[add_multiline_comment]
                         |   singlelineComment[add_singleline_comment]
+                        ;
+        
+        comments        =   *(comment > space);
+        
+        topElement      =   comment
                         |   importLine[add_importline]
                         ;
+        
+        objectDeclaration   = uppercaseIdentifier[add_Object]
+                            > space
+                            > qi::lit('{')
+                            > space
+                            > comments
+                            > qi::lit('}')
+                            ;
         
         space = *(qi::lit(' ') | qi::lit('\n') | qi::lit('\t'));
         multilineComment = confix("/*", "*/")[*(qi::char_ - "*/")];
         singlelineComment = confix("//", qi::eol)[*(qi::char_ - qi::eol)];
         importLine = confix("import", qi::eol)[*(qi::char_ - qi::eol)];
+        uppercaseIdentifier = qi::char_("A-Z") > *qi::char_("_a-zA-Z0-9");
+        lowercaseIdentifier = qi::char_("a-z") > *qi::char_("_a-zA-Z0-9");
     }
     
     qi::rule<Iterator, std::string()> multilineComment;
     qi::rule<Iterator, std::string()> singlelineComment;
     qi::rule<Iterator, std::string()> importLine;
+    qi::rule<Iterator, std::string()> uppercaseIdentifier;    
+    qi::rule<Iterator, std::string()> lowercaseIdentifier;    
     qi::rule<Iterator> rootElements;
-    qi::rule<Iterator, std::string()> object;
+    qi::rule<Iterator, std::string()> topElement;
     qi::rule<Iterator> space;
+    qi::rule<Iterator, std::string()> objectDeclaration;
+    qi::rule<Iterator> comment;
+    qi::rule<Iterator> comments;
 };
 
 // wrap forward iterator with position iterator, to record the position
