@@ -51,6 +51,9 @@ run:
 $(TARGET):	.depend $(OBJS)
 	$(CXX) -o $@ $(OBJS) $(LDFLAGS)
 
+deploy:
+	cp $(SOURCES) $(HEADERS) ../../../../src/
+
 .depend:	Makefile $(SOURCES) $(HEADERS)
 	$(CXX) -MM $(CPPFLAGS) $(CXXFLAGS) $(SOURCES) >$@
 
