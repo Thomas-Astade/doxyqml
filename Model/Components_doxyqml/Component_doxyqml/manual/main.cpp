@@ -105,6 +105,25 @@ struct qml_parser
                             > qi::lit('}')
                             ;
         
+        quotedText          = qi::lit('"')
+                            > *(qi::lit("\\\\") | qi::lit("\\\"") | qi::alnum | qi::char_(" ,.;:_<>|~!§$%&/()=?{[]}'-"))
+                            >  qi::lit('"')
+                            ;
+                            
+        someText            = qi::lit(' ') 
+                            | qi::lit('\n') 
+                            | qi::lit('\t')
+                            | qi::alnum 
+                            | qi::char_(",.;:_<>|~!*§$%&/()=?[]'-\\\"") 
+                            | inCurlyBrackets
+                            ;
+                            
+        inCurlyBrackets     = qi::lit('{')
+                            > *someText
+                            >  qi::lit('}')
+                            ;
+                            
+        
         space = *(qi::lit(' ') | qi::lit('\n') | qi::lit('\t'));
         multilineComment = confix("/*", "*/")[*(qi::char_ - "*/")];
         singlelineComment = confix("//", qi::eol)[*(qi::char_ - qi::eol)];
@@ -125,6 +144,9 @@ struct qml_parser
     qi::rule<Iterator> space;
     qi::rule<Iterator, std::string()> objectDeclaration;
     qi::rule<Iterator, std::string()> property;
+    qi::rule<Iterator, std::string()> quotedText;
+    qi::rule<Iterator, std::string()> inCurlyBrackets;
+    qi::rule<Iterator, std::string()> someText;
     qi::rule<Iterator> comment;
     qi::rule<Iterator> comments;
 };
