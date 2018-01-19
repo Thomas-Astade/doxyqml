@@ -37,7 +37,7 @@
 doxyqml::CProperty::CProperty(const std::string& comment)
 {
 	NOTIFY_CONSTRUCTOR(5, "CProperty", "const std::string& comment")
-//[Package_doxyqml/Package_ast/classes/class_BELKKAUG/operations/constructor_YPQJPKPZ/code.cpp]
+//[Package_doxyqml/Package_ast/classes/class_CProperty/operations/constructor/code.cpp]
 	//~~ CProperty(const std::string& comment) [CProperty] ~~
 	m_CommentText = trim(comment);
 //[EOF]
@@ -46,7 +46,7 @@ doxyqml::CProperty::CProperty(const std::string& comment)
 void doxyqml::CProperty::print() const
 {
 	NOTIFY_FUNCTION_CALL(this, 5, "CProperty", "print", "", "void ")
-//[Package_doxyqml/Package_ast/classes/class_BELKKAUG/operations/operation_RVONLULC/code.cpp]
+//[Package_doxyqml/Package_ast/classes/class_CProperty/operations/operation_print/code.cpp]
 	//~~ void print() [CProperty] ~~
 	printf("Q_PROPERTY(%s)\n",m_CommentText.c_str());
 //[EOF]

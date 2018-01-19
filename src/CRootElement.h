@@ -32,9 +32,8 @@ class CRootElement : public CQmlObject
 
 public:
 /** construct from a text
-@param filename the text of the element
 */
-	CRootElement(const std::string& filename);
+	CRootElement();
 
 /** print the generated code to stdout
 */
@@ -44,6 +43,11 @@ public:
 @param baseClass the new base class
 */
 	void setBaseClass(const std::string& baseClass);
+
+/** accessor
+@param filename the text of the element
+*/
+	void setFilename(const std::string& filename);
 
 
 protected:

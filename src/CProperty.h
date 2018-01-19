@@ -13,7 +13,7 @@
 #  define __CPROPERTY_H
 
 //****** specification prolog ******
-//[Package_doxyqml/Package_ast/classes/class_BELKKAUG/prolog.h]
+//[Package_doxyqml/Package_ast/classes/class_CProperty/prolog.h]
 #include <string>
 //[EOF]
 //**********************************

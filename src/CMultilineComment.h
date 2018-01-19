@@ -13,7 +13,7 @@
 #  define __CMULTILINECOMMENT_H
 
 //****** specification prolog ******
-//[Package_doxyqml/Package_ast/classes/class_VAXZHOUH/prolog.h]
+//[Package_doxyqml/Package_ast/classes/class_CMultilineComment/prolog.h]
 #include <string>
 //[EOF]
 //**********************************

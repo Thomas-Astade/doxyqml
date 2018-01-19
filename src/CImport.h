@@ -13,7 +13,7 @@
 #  define __CIMPORT_H
 
 //****** specification prolog ******
-//[Package_doxyqml/Package_ast/classes/class_KIOWYASQ/prolog.h]
+//[Package_doxyqml/Package_ast/classes/class_CImport/prolog.h]
 #include <string>
 //[EOF]
 //**********************************

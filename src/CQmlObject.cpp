@@ -43,7 +43,7 @@
 void doxyqml::CQmlObject::addChild(CQmlObject* child)
 {
 	NOTIFY_FUNCTION_CALL(this, 5, "CQmlObject", "addChild", "CQmlObject* child", "void ")
-//[Package_doxyqml/Package_ast/classes/class_CQmlObject/operations/operation_addChild/code.cpp]
+//[Package_doxyqml/Package_ast/classes/class_CQmlObject/operations/operation_addChild_1/code.cpp]
 	//~~ void addChild(CQmlObject* child) [CQmlObject] ~~
 	myChilds.push_back(child);
 //[EOF]
@@ -62,7 +62,7 @@ void doxyqml::CQmlObject::print() const
 const std::string doxyqml::CQmlObject::trim(const std::string& s)
 {
 	NOTIFY_FUNCTION_CALL(this, 5, "CQmlObject", "trim", "const std::string& s", "const std::string ")
-//[Package_doxyqml/Package_ast/classes/class_CQmlObject/operations/operation_VFRYOFAL/code.cpp]
+//[Package_doxyqml/Package_ast/classes/class_CQmlObject/operations/operation_trim/code.cpp]
 	std::string::size_type first = s.find_first_not_of(" \n\t\r");
 	if( first == std::string::npos) {
 	  return std::string();

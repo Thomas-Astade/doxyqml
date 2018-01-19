@@ -41,20 +41,11 @@
 #  define LOG(...)
 #endif
 
-doxyqml::CRootElement::CRootElement(const std::string& filename) :
-	m_Filename(filename),
-	m_Classname(filename)
+doxyqml::CRootElement::CRootElement()
 {
-	NOTIFY_CONSTRUCTOR(5, "CRootElement", "const std::string& filename")
+	NOTIFY_CONSTRUCTOR(5, "CRootElement", "")
 //[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/constructor/code.cpp]
 	//~~ CRootElement(const std::string& filename) [CRootElement] ~~
-	size_t pos = m_Classname.find('.');
-	if (pos != std::string::npos)
-	    m_Classname.erase(pos);
-	
-	pos = m_Classname.rfind('/');
-	if (pos != std::string::npos)
-	    m_Classname.erase(0,pos+1);
 //[EOF]
 }
 
@@ -63,17 +54,11 @@ void doxyqml::CRootElement::print() const
 	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "print", "", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_print/code.cpp]
 	//~~ void print() [CRootElement] ~~
-	for (std::vector<CQmlObject*>::const_iterator it = myChilds.begin(); it != myChilds.end(); it++)
-	{
-	    if (dynamic_cast<CObjectDeclaration*>(*it))
-	    {
-	        printf("class %s ",m_Classname.c_str());
-	        if (!m_BaseClass.empty())
-	            printf(": public %s",m_BaseClass.c_str());
-	        printf(" {\n");
-	    }
-	    (*it)->print();
-	}
+	CQmlObject::print();
+	printf("class %s ",m_Classname.c_str());
+	if (!m_BaseClass.empty())
+	    printf(": public %s",m_BaseClass.c_str());
+	printf(" {\n");
 	printf("};\n");
 //[EOF]
 }
@@ -84,6 +69,24 @@ void doxyqml::CRootElement::setBaseClass(const std::string& baseClass)
 //[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_setBaseClass/code.cpp]
 	//~~ void setBaseClass(const std::string& baseClass) [CRootElement] ~~
 	m_BaseClass = baseClass;
+//[EOF]
+}
+
+void doxyqml::CRootElement::setFilename(const std::string& filename)
+{
+	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "setFilename", "const std::string& filename", "void ")
+//[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_setFilename/code.cpp]
+	//~~ void setFilename(const std::string& filename) [CRootElement] ~~
+	m_Classname = filename;
+	m_Filename = filename;
+	
+	size_t pos = m_Classname.find('.');
+	if (pos != std::string::npos)
+	    m_Classname.erase(pos);
+	
+	pos = m_Classname.rfind('/');
+	if (pos != std::string::npos)
+	    m_Classname.erase(0,pos+1);
 //[EOF]
 }
 

@@ -38,7 +38,7 @@ doxyqml::CImport::CImport(const std::string& importLine) :
 	m_ImportLineText(importLine)
 {
 	NOTIFY_CONSTRUCTOR(5, "CImport", "const std::string& importLine")
-//[Package_doxyqml/Package_ast/classes/class_KIOWYASQ/operations/constructor_GFYEGQUA/code.cpp]
+//[Package_doxyqml/Package_ast/classes/class_CImport/operations/constructor/code.cpp]
 	//~~ CRootElement(const std::string& filename) [CRootElement] ~~
 //[EOF]
 }
@@ -46,7 +46,7 @@ doxyqml::CImport::CImport(const std::string& importLine) :
 void doxyqml::CImport::print() const
 {
 	NOTIFY_FUNCTION_CALL(this, 5, "CImport", "print", "", "void ")
-//[Package_doxyqml/Package_ast/classes/class_KIOWYASQ/operations/operation_RMUZTWFI/code.cpp]
+//[Package_doxyqml/Package_ast/classes/class_CImport/operations/operation_print/code.cpp]
 	//~~ void print() [CImport] ~~
 	printf("// import%s\n",m_ImportLineText.c_str());
 //[EOF]

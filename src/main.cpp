@@ -36,41 +36,42 @@ struct Arguments
 };
 
 Arguments arguments;
-std::vector<doxyqml::CQmlObject*> gObjectStack; // holds the current objets during parsing
+doxyqml::CRootElement gRootObject;
+
 
 void add_multiline_comment(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
 {
     doxyqml::CMultilineComment* p = new doxyqml::CMultilineComment(name);
-    gObjectStack.back()->addChild(p);
+    gRootObject.addChild(p);
 }
 
 void add_singleline_comment(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
 {
     doxyqml::CSinglelineComment* p = new doxyqml::CSinglelineComment(name);
-    gObjectStack.back()->addChild(p);
+    gRootObject.addChild(p);
 }
 
+/*
 void add_property(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
 {
     doxyqml::CProperty* p = new doxyqml::CProperty(name);
     gObjectStack.back()->addChild(p);
 }
 
+*/
 void add_importline(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
 {
     doxyqml::CImport* p = new doxyqml::CImport(name);
-    gObjectStack.back()->addChild(p);
+    gRootObject.addChild(p);
 }
 
 void add_Object(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
 {
-    doxyqml::CRootElement* p = dynamic_cast<doxyqml::CRootElement*>(gObjectStack.back());
-    if (p)
-        p->setBaseClass(name);
+    gRootObject.setBaseClass(name);
     doxyqml::CObjectDeclaration* o = new doxyqml::CObjectDeclaration(name);
-    gObjectStack.back()->addChild(o);
-    gObjectStack.push_back(o);
+    gRootObject.addChild(o);
 }
+
 
 template <typename Iterator>
 struct qml_parser
@@ -94,7 +95,7 @@ struct qml_parser
                         ;
                         
         objectElement   =   comment
-                        |   property[add_property]
+                        |   property//[add_property]
                         ;
         
         objectDeclaration   = uppercaseIdentifier[add_Object]
@@ -104,6 +105,25 @@ struct qml_parser
                             > *(objectElement > space)
                             > qi::lit('}')
                             ;
+        
+        quotedText          = qi::lit('"')
+                            > *(qi::lit("\\\\") | qi::lit("\\\"") | qi::alnum | qi::char_(" ,.;:_<>|~!§$%&/()=?{[]}'-"))
+                            >  qi::lit('"')
+                            ;
+                            
+        someText            = qi::lit(' ') 
+                            | qi::lit('\n') 
+                            | qi::lit('\t')
+                            | qi::alnum 
+                            | qi::char_(",.;:_<>|~!*§$%&/()=?[]'-\\\"") 
+                            | inCurlyBrackets
+                            ;
+                            
+        inCurlyBrackets     = qi::lit('{')
+                            > *someText
+                            >  qi::lit('}')
+                            ;
+                            
         
         space = *(qi::lit(' ') | qi::lit('\n') | qi::lit('\t'));
         multilineComment = confix("/*", "*/")[*(qi::char_ - "*/")];
@@ -125,6 +145,9 @@ struct qml_parser
     qi::rule<Iterator> space;
     qi::rule<Iterator, std::string()> objectDeclaration;
     qi::rule<Iterator, std::string()> property;
+    qi::rule<Iterator, std::string()> quotedText;
+    qi::rule<Iterator, std::string()> inCurlyBrackets;
+    qi::rule<Iterator, std::string()> someText;
     qi::rule<Iterator> comment;
     qi::rule<Iterator> comments;
 };
@@ -147,8 +170,8 @@ bool load(const std::string& filename)
         pos_iterator_type position_begin(begin, end, filename.c_str());
         pos_iterator_type position_end;
 
-        qml_parser<pos_iterator_type> p;                                // create instance of parser
-        gObjectStack.push_back(new doxyqml::CRootElement(filename));    // initialize the object stack
+        qml_parser<pos_iterator_type> p;  // create instance of parser
+        gRootObject.setFilename(filename);
 
         qi::phrase_parse(position_begin, position_end, p, qi::space);
 
@@ -221,7 +244,6 @@ int main (int argc, char **argv)
     argp_parse (&argp, argc, argv, 0, 0, &arguments);
     if (!arguments.filename.empty())
         load(arguments.filename);
-    if (!gObjectStack.empty())
-        gObjectStack.front()->print();
+    gRootObject.print();
     return 0;
 }

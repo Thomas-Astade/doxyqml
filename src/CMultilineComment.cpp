@@ -38,7 +38,7 @@ doxyqml::CMultilineComment::CMultilineComment(const std::string& comment) :
 	m_CommentText(comment)
 {
 	NOTIFY_CONSTRUCTOR(5, "CMultilineComment", "const std::string& comment")
-//[Package_doxyqml/Package_ast/classes/class_VAXZHOUH/operations/constructor_IHBYKYCF/code.cpp]
+//[Package_doxyqml/Package_ast/classes/class_CMultilineComment/operations/constructor/code.cpp]
 	//~~ CRootElement(const std::string& filename) [CRootElement] ~~
 //[EOF]
 }
@@ -46,7 +46,7 @@ doxyqml::CMultilineComment::CMultilineComment(const std::string& comment) :
 void doxyqml::CMultilineComment::print() const
 {
 	NOTIFY_FUNCTION_CALL(this, 5, "CMultilineComment", "print", "", "void ")
-//[Package_doxyqml/Package_ast/classes/class_VAXZHOUH/operations/operation_QLLBKOHJ/code.cpp]
+//[Package_doxyqml/Package_ast/classes/class_CMultilineComment/operations/operation_print/code.cpp]
 	//~~ void print() [CMultilineComment] ~~
 	printf("/*%s*/\n",m_CommentText.c_str());
 //[EOF]
