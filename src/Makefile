@@ -6,6 +6,7 @@ TARGET := doxyqml
 
 # find sources and headers
 SOURCES	:= $(wildcard *.cpp)
+HEADERS	:= $(wildcard *.h)
 
 # objects go into current directory
 OBJS 	:= $(notdir $(SOURCES:.cpp=.o))
@@ -22,6 +23,6 @@ $(TARGET):	.depend $(OBJS)
 	$(CXX) -o $@ $(OBJS) $(LDFLAGS)
 
 .depend:	Makefile $(SOURCES) $(HEADERS)
-	$(CXX) -MM $(CPPFLAGS) $(CXXFLAGS) $(SOURCES) >$@
+	$(CXX) -MM $(CXXFLAGS) $(SOURCES) >$@
 
 -include .depend
