@@ -23,6 +23,7 @@
 #include "CProperty.h"
 #include "CSignal.h"
 #include "CFunction.h"
+#include "CNamespaceImport.h"
 
 namespace classic = boost::spirit::classic;
 namespace qi = boost::spirit::qi;
@@ -96,6 +97,30 @@ void set_id(const std::string& name, const boost::spirit::unused_type& it, bool&
     gRootObject.set_id(name);
 }
 
+void add_namespace(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+{
+    gRootObject.add_namespace(name);
+}
+
+std::string gNamespaceText;
+void setNamespaceText(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+{
+    gNamespaceText = name;
+}
+
+std::string gNamespaceIdentifier;
+void setNamespaceIdentifier(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+{
+    gNamespaceIdentifier = name;
+}
+
+void add_namespaceImport(const boost::spirit::unused_type& name, const boost::spirit::unused_type& it, bool& pass)
+{
+    doxyqml::CNamespaceImport* o = new doxyqml::CNamespaceImport(gNamespaceText, gNamespaceIdentifier);
+    gRootObject.addChild(o);
+}
+
+
 template <typename Iterator>
 struct qml_parser
   : qi::grammar<Iterator>
@@ -103,8 +128,8 @@ struct qml_parser
     qml_parser() : qml_parser::base_type(rootElements)
     {
         rootElements    =   *(topElement > space)
-                        >   topObjectDeclaration
-                        >   space
+                        >>  topObjectDeclaration
+                        >>  space
                         ;
         
         comment         =   multilineComment[add_multiline_comment]
@@ -112,6 +137,7 @@ struct qml_parser
                         ;
         
         topElement      =   comment
+                        |   namespaceImportLine[add_namespaceImport]
                         |   importLine[add_importline]
                         ;
                         
@@ -121,6 +147,7 @@ struct qml_parser
                         |   function[add_function]
                         |   objectDeclaration
                         |   idText
+                        |   slot
                         |   propertySetting
                         ;
         
@@ -133,66 +160,81 @@ struct qml_parser
                                 ;
         
         idText              =   "id:"
-                            >   space
-                            >   lowercaseIdentifier[set_id]
-                            >   space
-                            >   *qi::lit(';')
+                            >>  space
+                            >>  lowercaseIdentifier[set_id]
+                            >>  space
+                            >>  *qi::lit(';')
                             ;
         
-        valueText           =   qualifiedIdentifier
-                            |   quotedText
-                            |   *(qi::alnum | '.')
+        valueText           =   *(qi::char_ - qi::eol - qi::char_('}'))
                             ;
         
         propertySetting     =   qualifiedIdentifier
-                            >   space
-                            >   qi::lit(':')
-                            >   space
-                            >   valueText
-                            >   space
-                            >   *qi::lit(';')
+                            >>  space
+                            >>  qi::lit(':')
+                            >>  space
+                            >>  (objectDeclaration | valueText)
+                            >>  space
+                            >>  *qi::lit(';')
                             ;
         
         objectDeclaration   =   uppercaseIdentifier[add_SubObject]
-                            >   space
-                            >   qi::lit('{')
-                            >   space
-                            >   *(objectElement > space)
-                            >   qi::lit('}')
+                            >>  *(qi::char_('.') >> uppercaseIdentifier[add_namespace])
+                            >>  space
+                            >>  qi::lit('{')
+                            >>  space
+                            >>  *(objectElement > space)
+                            >>  qi::lit('}')
                             ;
         
         function            =   qi::lit("function")
-                            >   space
-                            >   lowercaseIdentifier
-                            >   space
-                            >   paramList
-                            >   space
-                            >   inCurlyBrackets
+                            >>  space
+                            >>  lowercaseIdentifier
+                            >>  space
+                            >>  paramList
+                            >>  space
+                            >>  inCurlyBrackets
                             ;
                             
         quotedText          =   confix("\"", "\"")[*((qi::char_ - "\"" - "\\") | ("\\" > qi::char_))];
 
                             
         qualifiedIdentifier =   lowercaseIdentifier
-                            >   *(qi::lit('.') > lowercaseIdentifier)
+                            >>  *(qi::lit('.') > lowercaseIdentifier)
                             ;
                             
-        someText            = qi::lit(' ') 
-                            | qi::lit('\n') 
-                            | qi::lit('\t')
-                            | qi::alnum 
-                            | qi::char_(",.;:_<>|~!*§$%&/()=?[]'-\\\"") 
-                            | inCurlyBrackets
+        someText            =   qi::lit(' ') 
+                            |   qi::lit('\n') 
+                            |   qi::lit('\t')
+                            |   qi::alnum 
+                            |   qi::char_(",.;:_<>|~!*§$%&/()=?[]'-\\\"") 
+                            |   inCurlyBrackets
                             ;
                             
-        inCurlyBrackets     = qi::lit('{')
-                            > *someText
-                            >  qi::lit('}')
+        inCurlyBrackets     =   qi::lit('{')
+                            >>  *someText
+                            >>  qi::lit('}')
                             ;
                             
-        paramList           = qi::char_('(')
-                            > *(qi::char_ - ")")
-                            > qi::char_(')')
+        paramList           =   qi::char_('(')
+                            >>  *(qi::char_ - ")")
+                            >>  qi::char_(')')
+                            ;
+        
+        slot                =   lowercaseIdentifier
+                            >>  space
+                            >>  qi::lit(':')
+                            >>  space
+                            >>  inCurlyBrackets
+                            ;
+                            
+        namespaceImportLine = qi::lit("import")
+                            >>  space
+                            >>  quotedText[setNamespaceText]
+                            >>  space
+                            >>  qi::lit("as")
+                            >>  space
+                            >>  uppercaseIdentifier[setNamespaceIdentifier]
                             ;
         
         space = *(qi::lit(' ') | qi::lit('\n') | qi::lit('\t'));
@@ -208,6 +250,7 @@ struct qml_parser
     qi::rule<Iterator, std::string()> multilineComment;
     qi::rule<Iterator, std::string()> singlelineComment;
     qi::rule<Iterator, std::string()> importLine;
+    qi::rule<Iterator> namespaceImportLine;
     qi::rule<Iterator, std::string()> uppercaseIdentifier;
     qi::rule<Iterator, std::string()> lowercaseIdentifier;
     qi::rule<Iterator, std::string()> qualifiedIdentifier;
@@ -225,6 +268,7 @@ struct qml_parser
     qi::rule<Iterator, std::string()> valueText;
     qi::rule<Iterator> inCurlyBrackets;
     qi::rule<Iterator> propertySetting;
+    qi::rule<Iterator> slot;
     qi::rule<Iterator, std::string()> paramList;
     qi::rule<Iterator, std::string()> function;
     qi::rule<Iterator, std::string()> someText;
@@ -240,6 +284,13 @@ bool load(const std::string& filename)
     {
         // open file, disable skipping of whitespace
         std::ifstream in(filename.c_str());
+        
+        if (arguments.debug)
+             std::cerr
+                << "doxyqml: Parsing file: "
+                << filename
+                << std::endl;
+                
         in.unsetf(std::ios::skipws);
 
         // wrap istream into iterator

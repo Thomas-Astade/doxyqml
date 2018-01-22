@@ -1,1 +1,1 @@
-//~~ CRootElement(const std::string& filename) [CRootElement] ~~
+//~~ CImport(const std::string& importLine) [CImport] ~~

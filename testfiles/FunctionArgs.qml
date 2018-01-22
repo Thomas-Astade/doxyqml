@@ -50,11 +50,9 @@ Item {
 
     /// One-line comment
     function refresh() {
-    }   
+    }
 
     Item {
-    id: mainwindow
-    jkj: "hallo\"welt\\"
     }
 
     property /* foo */ int /* bar */ weirdProperty /* baz */ : /* foo */ 12

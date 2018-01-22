@@ -39,7 +39,7 @@ doxyqml::CImport::CImport(const std::string& importLine) :
 {
 	NOTIFY_CONSTRUCTOR(5, "CImport", "const std::string& importLine")
 //[Package_doxyqml/Package_ast/classes/class_CImport/operations/constructor/code.cpp]
-	//~~ CRootElement(const std::string& filename) [CRootElement] ~~
+	//~~ CImport(const std::string& importLine) [CImport] ~~
 //[EOF]
 }
 

@@ -5,15 +5,15 @@
  * of the copyright to the underlying model at the time this code *
  * was generated; this code may be distributed under terms of     *
  * his/her/their choice.                                          */
-/** a declared object
- *  @file CObjectDeclaration.h
+/** an import with namespace
+ *  @file CNamespaceImport.h
  ******************************************************************/
 
-#ifndef __COBJECTDECLARATION_H
-#  define __COBJECTDECLARATION_H
+#ifndef __CNAMESPACEIMPORT_H
+#  define __CNAMESPACEIMPORT_H
 
 //****** specification prolog ******
-//[Package_doxyqml/Package_ast/classes/class_CObjectDeclaration/prolog.h]
+//[Package_doxyqml/Package_ast/classes/class_YMCKDJUQ/prolog.h]
 #include <string>
 //[EOF]
 //**********************************
@@ -25,46 +25,33 @@
 /** all doxyqml dependend classes
 */
 namespace doxyqml {
-/** a declared object
+/** an import with namespace
 */
-class CObjectDeclaration : public CQmlObject
+class CNamespaceImport : public CQmlObject
 {
 
 public:
-/** set the namespace of the current sub item
-@param Namespace the namespace of the item
-*/
-	void add_namespace(const std::string& Namespace);
-
 /** construct from a text
-@param objectName the text of the element
+@param filename the text of the element
+@param namespaceName the text of the element
 */
-	CObjectDeclaration(const std::string& objectName);
+	CNamespaceImport(const std::string& filename, const std::string& namespaceName);
 
 /** print the generated code to stdout
 */
 	virtual void print() const;
 
-/** set the id of the curren sub item
-@param id the id of the item
-*/
-	void set_id(const std::string& id);
-
 
 protected:
 
 private:
-/** used to generate unique IDs
+/** the text of the import line
 */
-	static unsigned int	idCounter;
+	std::string	m_filename;
 
-/** the name of the base class
+/** the text of the import line
 */
-	std::string	m_ObjectName;
-
-/** the id of that object
-*/
-	std::string	m_id;
+	std::string	m_NamespaceName;
 
 };
 } // namespace doxyqml

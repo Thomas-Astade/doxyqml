@@ -12,10 +12,13 @@ if (pos != std::string::npos)
 
 m_Namespace = filename;
 
+pos = m_Namespace.find("/qml/");
+if (pos != std::string::npos)
+    m_Namespace.erase(0,pos+1);
+
 pos = m_Namespace.rfind('/');
 if (pos != std::string::npos)
     m_Namespace.erase(pos);
-
 
 do {
     pos = m_Namespace.find("../");

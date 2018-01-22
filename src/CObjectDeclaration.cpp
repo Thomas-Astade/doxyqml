@@ -36,6 +36,16 @@
 
 unsigned int	doxyqml::CObjectDeclaration::idCounter = 0;
 
+void doxyqml::CObjectDeclaration::add_namespace(const std::string& Namespace)
+{
+	NOTIFY_FUNCTION_CALL(this, 5, "CObjectDeclaration", "add_namespace", "const std::string& Namespace", "void ")
+//[Package_doxyqml/Package_ast/classes/class_CObjectDeclaration/operations/operation_MCJZPSBR/code.cpp]
+	//~~ void add_namespace(const std::string& Namespace) [CObjectDeclaration] ~~
+	m_ObjectName += "::";
+	m_ObjectName += Namespace;
+//[EOF]
+}
+
 doxyqml::CObjectDeclaration::CObjectDeclaration(const std::string& objectName) :
 	m_ObjectName(objectName)
 {
@@ -52,11 +62,11 @@ void doxyqml::CObjectDeclaration::print() const
 	//~~ void print() [CObjectDeclaration] ~~
 	if (m_id.empty())
 	{
-	    printf ("private: attr_%d %s;\n",idCounter++, m_ObjectName.c_str());
+	    printf ("private: %s attr_%d;\n", m_ObjectName.c_str(),idCounter++);
 	}
 	else
 	{
-	    printf ("private: %s %s;\n",m_id.c_str(), m_ObjectName.c_str());
+	    printf ("private: %s %s;\n", m_ObjectName.c_str(), m_id.c_str());
 	}
 //[EOF]
 }
@@ -64,7 +74,7 @@ void doxyqml::CObjectDeclaration::print() const
 void doxyqml::CObjectDeclaration::set_id(const std::string& id)
 {
 	NOTIFY_FUNCTION_CALL(this, 5, "CObjectDeclaration", "set_id", "const std::string& id", "void ")
-//[Package_doxyqml/Package_ast/classes/class_CObjectDeclaration/operations/operation_SIFFUBQD/code.cpp]
+//[Package_doxyqml/Package_ast/classes/class_CObjectDeclaration/operations/operation_set_id/code.cpp]
 	//~~ void set_id(const std::string& id) [CObjectDeclaration] ~~
 	m_id = id;
 //[EOF]

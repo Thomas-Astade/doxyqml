@@ -38,6 +38,11 @@ class CRootElement : public CQmlObject
 {
 
 public:
+/** set the namespace of the current sub item
+@param Namespace the namespace of the item
+*/
+	void add_namespace(const std::string& Namespace);
+
 /** used to add a child to the object
 @param child the new child
 */

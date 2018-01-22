@@ -44,6 +44,16 @@
 #  define LOG(...)
 #endif
 
+void doxyqml::CRootElement::add_namespace(const std::string& Namespace)
+{
+	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "add_namespace", "const std::string& Namespace", "void ")
+//[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_CCQEUKPC/code.cpp]
+	//~~ void add_namespace(const std::string& Namespace) [CRootElement] ~~
+	if (!mySubObjects.empty())
+	    mySubObjects.back()->add_namespace(Namespace);
+//[EOF]
+}
+
 void doxyqml::CRootElement::addChild(CQmlObject* child)
 {
 	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "addChild", "CQmlObject* child", "void ")
@@ -59,7 +69,7 @@ void doxyqml::CRootElement::addChild(CQmlObject* child)
 void doxyqml::CRootElement::addSubObject(CObjectDeclaration* child)
 {
 	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "addSubObject", "CObjectDeclaration* child", "void ")
-//[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_XVSLJDQO/code.cpp]
+//[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_addSubObject/code.cpp]
 	//~~ void addSubObject(CObjectDeclaration* child) [CRootElement] ~~
 	mySubObjects.push_back(child);
 //[EOF]
@@ -102,7 +112,7 @@ void doxyqml::CRootElement::print() const
 void doxyqml::CRootElement::set_id(const std::string& id)
 {
 	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "set_id", "const std::string& id", "void ")
-//[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_IOWRRMGR/code.cpp]
+//[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_set_id/code.cpp]
 	//~~ void set_id(const std::string& id) [CRootElement] ~~
 	if (!mySubObjects.empty())
 	    mySubObjects.back()->set_id(id);
@@ -136,10 +146,13 @@ void doxyqml::CRootElement::setFilename(const std::string& filename)
 	
 	m_Namespace = filename;
 	
+	pos = m_Namespace.find("/qml/");
+	if (pos != std::string::npos)
+	    m_Namespace.erase(0,pos+1);
+	
 	pos = m_Namespace.rfind('/');
 	if (pos != std::string::npos)
 	    m_Namespace.erase(pos);
-	
 	
 	do {
 	    pos = m_Namespace.find("../");
