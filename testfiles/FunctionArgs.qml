@@ -54,7 +54,7 @@ Item {
 
     Item {
     id: mainwindow
-    jkj: 6
+    jkj: "hallo\"welt\\"
     }
 
     property /* foo */ int /* bar */ weirdProperty /* baz */ : /* foo */ 12

@@ -8,6 +8,7 @@
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/classic_position_iterator.hpp>
 #include <boost/spirit/repository/include/qi_confix.hpp>
+#include <boost/spirit/include/qi_lexeme.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
@@ -138,11 +139,16 @@ struct qml_parser
                             >   *qi::lit(';')
                             ;
         
+        valueText           =   qualifiedIdentifier
+                            |   quotedText
+                            |   *(qi::alnum | '.')
+                            ;
+        
         propertySetting     =   qualifiedIdentifier
                             >   space
                             >   qi::lit(':')
                             >   space
-                            >   (*(qi::alnum | '.') | quotedText)
+                            >   valueText
                             >   space
                             >   *qi::lit(';')
                             ;
@@ -164,10 +170,8 @@ struct qml_parser
                             >   inCurlyBrackets
                             ;
                             
-        quotedText          =   qi::lit('"')
-                            >   *(qi::lit("\\\\") | qi::lit("\\\"") | qi::alnum | qi::char_(" ,.;:_<>|~!§$%&/()=?{[]}'-"))
-                            >   qi::lit('"')
-                            ;
+        quotedText          =   confix("\"", "\"")[*((qi::char_ - "\"" - "\\") | ("\\" > qi::char_))];
+
                             
         qualifiedIdentifier =   lowercaseIdentifier
                             >   *(qi::lit('.') > lowercaseIdentifier)
@@ -218,6 +222,7 @@ struct qml_parser
     qi::rule<Iterator, std::string()> signal;
     qi::rule<Iterator, std::string()> quotedText;
     qi::rule<Iterator, std::string()> idText;
+    qi::rule<Iterator, std::string()> valueText;
     qi::rule<Iterator> inCurlyBrackets;
     qi::rule<Iterator> propertySetting;
     qi::rule<Iterator, std::string()> paramList;
