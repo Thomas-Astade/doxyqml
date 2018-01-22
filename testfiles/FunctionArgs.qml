@@ -50,9 +50,11 @@ Item {
 
     /// One-line comment
     function refresh() {
-    }
+    }   
 
     Item {
+    id: mainwindow
+    jkj: 6
     }
 
     property /* foo */ int /* bar */ weirdProperty /* baz */ : /* foo */ 12

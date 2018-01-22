@@ -11,6 +11,8 @@ printf(" {\n");
 
 for (std::vector<CQmlObject*>::const_iterator it = myMemberChilds.begin(); it != myMemberChilds.end(); it++)
     (*it)->print();
+for (std::vector<CObjectDeclaration*>::const_iterator it = mySubObjects.begin(); it != mySubObjects.end(); it++)
+    (*it)->print();
     
 printf("};\n");
 printf("}\n");

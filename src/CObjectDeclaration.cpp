@@ -48,6 +48,7 @@ void doxyqml::CObjectDeclaration::print() const
 //[Package_doxyqml/Package_ast/classes/class_CObjectDeclaration/operations/operation_print/code.cpp]
 	//~~ void print() [CObjectDeclaration] ~~
 	CQmlObject::print();
+	printf("//CObjectDeclaration\n");
 //[EOF]
 }
 

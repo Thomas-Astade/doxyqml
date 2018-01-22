@@ -2,7 +2,7 @@
 m_Classname = filename;
 m_Filename = filename;
 
-size_t pos = m_Classname.find('.');
+size_t pos = m_Classname.rfind('.');
 if (pos != std::string::npos)
     m_Classname.erase(pos);
 

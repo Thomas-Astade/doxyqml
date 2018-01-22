@@ -85,8 +85,9 @@ void add_Object(const std::string& name, const boost::spirit::unused_type& it, b
     gRootObject.addChild(o);
 }
 
-void setMemberState(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+void setBasename(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
 {
+    gRootObject.setBaseClass(name);
     gRootObject.setMemberState();
 }
 
@@ -116,7 +117,7 @@ struct qml_parser
                         |   objectDeclaration
                         ;
         
-        topObjectDeclaration    = uppercaseIdentifier[add_Object][setMemberState]
+        topObjectDeclaration    = uppercaseIdentifier[setBasename]
                                 > space
                                 > qi::lit('{')
                                 > space
@@ -124,7 +125,7 @@ struct qml_parser
                                 > qi::lit('}')
                                 ;
         
-        objectDeclaration   =   uppercaseIdentifier[add_Object]
+        objectDeclaration   =   uppercaseIdentifier
                             >   space
                             >   qi::lit('{')
                             >   space

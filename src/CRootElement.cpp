@@ -46,7 +46,7 @@
 void doxyqml::CRootElement::addChild(CQmlObject* child)
 {
 	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "addChild", "CQmlObject* child", "void ")
-//[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_RXRCQJOW/code.cpp]
+//[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_addChild/code.cpp]
 	//~~ void addChild(CQmlObject* child) [CRootElement] ~~
 	if (state==0)
 	    myChilds.push_back(child);
@@ -120,6 +120,18 @@ void doxyqml::CRootElement::setFilename(const std::string& filename)
 	
 	
 	do {
+	    pos = m_Namespace.find("../");
+	    if (pos != std::string::npos)
+	        m_Namespace.erase(pos,3);
+	} while (pos != std::string::npos);
+	
+	do {
+	    pos = m_Namespace.find("./");
+	    if (pos != std::string::npos)
+	        m_Namespace.erase(pos,2);
+	} while (pos != std::string::npos);
+	
+	do {
 	    pos = m_Namespace.find('/');
 	    if (pos != std::string::npos)
 	    {
@@ -133,7 +145,7 @@ void doxyqml::CRootElement::setFilename(const std::string& filename)
 void doxyqml::CRootElement::setMemberState()
 {
 	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "setMemberState", "", "void ")
-//[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_JIUHNTZD/code.cpp]
+//[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_setMemberState/code.cpp]
 	//~~ void setMemberState() [CRootElement] ~~
 	state = 1;
 //[EOF]
