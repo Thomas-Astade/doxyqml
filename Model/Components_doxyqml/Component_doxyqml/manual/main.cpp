@@ -102,7 +102,6 @@ struct qml_parser
         topObjectDeclaration    = uppercaseIdentifier[add_Object][setMemberState]
                                 > space
                                 > qi::lit('{')
-                                > space
                                 > *(objectElement > space)
                                 > qi::lit('}')
                                 ;

@@ -1,6 +1,7 @@
 //~~ void print() [CRootElement] ~~
 CQmlObject::print();
 
+printf("namespace %s {\n",m_Namespace.c_str());
 printf("class %s ",m_Classname.c_str());
 
 if (!m_BaseClass.empty())
@@ -12,3 +13,4 @@ for (std::vector<CQmlObject*>::const_iterator it = myMemberChilds.begin(); it !=
     (*it)->print();
     
 printf("};\n");
+printf("}\n");
