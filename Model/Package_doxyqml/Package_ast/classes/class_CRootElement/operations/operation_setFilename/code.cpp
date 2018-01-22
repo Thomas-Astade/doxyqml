@@ -18,6 +18,18 @@ if (pos != std::string::npos)
 
 
 do {
+    pos = m_Namespace.find("../");
+    if (pos != std::string::npos)
+        m_Namespace.erase(pos,3);
+} while (pos != std::string::npos);
+
+do {
+    pos = m_Namespace.find("./");
+    if (pos != std::string::npos)
+        m_Namespace.erase(pos,2);
+} while (pos != std::string::npos);
+
+do {
     pos = m_Namespace.find('/');
     if (pos != std::string::npos)
     {
