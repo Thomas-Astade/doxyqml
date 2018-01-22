@@ -8,6 +8,7 @@
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/classic_position_iterator.hpp>
 #include <boost/spirit/repository/include/qi_confix.hpp>
+#include <boost/spirit/include/qi_lexeme.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
@@ -78,17 +79,21 @@ void add_importline(const std::string& name, const boost::spirit::unused_type& i
     gRootObject.addChild(p);
 }
 
-void add_Object(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+void add_SubObject(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
 {
-    gRootObject.setBaseClass(name);
     doxyqml::CObjectDeclaration* o = new doxyqml::CObjectDeclaration(name);
-    gRootObject.addChild(o);
+    gRootObject.addSubObject(o);
 }
 
 void setBasename(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
 {
     gRootObject.setBaseClass(name);
     gRootObject.setMemberState();
+}
+
+void set_id(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+{
+    gRootObject.set_id(name);
 }
 
 template <typename Iterator>
@@ -115,6 +120,8 @@ struct qml_parser
                         |   signal[add_signal]
                         |   function[add_function]
                         |   objectDeclaration
+                        |   idText
+                        |   propertySetting
                         ;
         
         topObjectDeclaration    = uppercaseIdentifier[setBasename]
@@ -125,7 +132,28 @@ struct qml_parser
                                 > qi::lit('}')
                                 ;
         
-        objectDeclaration   =   uppercaseIdentifier
+        idText              =   "id:"
+                            >   space
+                            >   lowercaseIdentifier[set_id]
+                            >   space
+                            >   *qi::lit(';')
+                            ;
+        
+        valueText           =   qualifiedIdentifier
+                            |   quotedText
+                            |   *(qi::alnum | '.')
+                            ;
+        
+        propertySetting     =   qualifiedIdentifier
+                            >   space
+                            >   qi::lit(':')
+                            >   space
+                            >   valueText
+                            >   space
+                            >   *qi::lit(';')
+                            ;
+        
+        objectDeclaration   =   uppercaseIdentifier[add_SubObject]
                             >   space
                             >   qi::lit('{')
                             >   space
@@ -142,9 +170,11 @@ struct qml_parser
                             >   inCurlyBrackets
                             ;
                             
-        quotedText          = qi::lit('"')
-                            > *(qi::lit("\\\\") | qi::lit("\\\"") | qi::alnum | qi::char_(" ,.;:_<>|~!§$%&/()=?{[]}'-"))
-                            >  qi::lit('"')
+        quotedText          =   confix("\"", "\"")[*((qi::char_ - "\"" - "\\") | ("\\" > qi::char_))];
+
+                            
+        qualifiedIdentifier =   lowercaseIdentifier
+                            >   *(qi::lit('.') > lowercaseIdentifier)
                             ;
                             
         someText            = qi::lit(' ') 
@@ -178,8 +208,10 @@ struct qml_parser
     qi::rule<Iterator, std::string()> multilineComment;
     qi::rule<Iterator, std::string()> singlelineComment;
     qi::rule<Iterator, std::string()> importLine;
-    qi::rule<Iterator, std::string()> uppercaseIdentifier;    
-    qi::rule<Iterator, std::string()> lowercaseIdentifier;    
+    qi::rule<Iterator, std::string()> uppercaseIdentifier;
+    qi::rule<Iterator, std::string()> lowercaseIdentifier;
+    qi::rule<Iterator, std::string()> qualifiedIdentifier;
+    
     qi::rule<Iterator> rootElements;
     qi::rule<Iterator, std::string()> topElement;
     qi::rule<Iterator> objectElement;
@@ -189,7 +221,10 @@ struct qml_parser
     qi::rule<Iterator, std::string()> property;
     qi::rule<Iterator, std::string()> signal;
     qi::rule<Iterator, std::string()> quotedText;
+    qi::rule<Iterator, std::string()> idText;
+    qi::rule<Iterator, std::string()> valueText;
     qi::rule<Iterator> inCurlyBrackets;
+    qi::rule<Iterator> propertySetting;
     qi::rule<Iterator, std::string()> paramList;
     qi::rule<Iterator, std::string()> function;
     qi::rule<Iterator, std::string()> someText;

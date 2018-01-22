@@ -19,6 +19,7 @@
 #include "CRootElement.h"	 // own header
 
 // Relation includes:
+#include "CObjectDeclaration.h"
 #include "CQmlObject.h"
 
 
@@ -55,6 +56,15 @@ void doxyqml::CRootElement::addChild(CQmlObject* child)
 //[EOF]
 }
 
+void doxyqml::CRootElement::addSubObject(CObjectDeclaration* child)
+{
+	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "addSubObject", "CObjectDeclaration* child", "void ")
+//[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_XVSLJDQO/code.cpp]
+	//~~ void addSubObject(CObjectDeclaration* child) [CRootElement] ~~
+	mySubObjects.push_back(child);
+//[EOF]
+}
+
 doxyqml::CRootElement::CRootElement() :
 	state(0)
 {
@@ -81,9 +91,21 @@ void doxyqml::CRootElement::print() const
 	
 	for (std::vector<CQmlObject*>::const_iterator it = myMemberChilds.begin(); it != myMemberChilds.end(); it++)
 	    (*it)->print();
+	for (std::vector<CObjectDeclaration*>::const_iterator it = mySubObjects.begin(); it != mySubObjects.end(); it++)
+	    (*it)->print();
 	    
 	printf("};\n");
 	printf("}\n");
+//[EOF]
+}
+
+void doxyqml::CRootElement::set_id(const std::string& id)
+{
+	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "set_id", "const std::string& id", "void ")
+//[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_IOWRRMGR/code.cpp]
+	//~~ void set_id(const std::string& id) [CRootElement] ~~
+	if (!mySubObjects.empty())
+	    mySubObjects.back()->set_id(id);
 //[EOF]
 }
 
@@ -104,7 +126,7 @@ void doxyqml::CRootElement::setFilename(const std::string& filename)
 	m_Classname = filename;
 	m_Filename = filename;
 	
-	size_t pos = m_Classname.find('.');
+	size_t pos = m_Classname.rfind('.');
 	if (pos != std::string::npos)
 	    m_Classname.erase(pos);
 	

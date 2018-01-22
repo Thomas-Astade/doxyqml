@@ -32,26 +32,34 @@ class CObjectDeclaration : public CQmlObject
 
 public:
 /** construct from a text
-@param filename the text of the element
+@param objectName the text of the element
 */
-	CObjectDeclaration(const std::string& filename);
+	CObjectDeclaration(const std::string& objectName);
 
 /** print the generated code to stdout
 */
 	virtual void print() const;
 
-/** accessor
-@param baseClass the new base class
+/** set the id of the curren sub item
+@param id the id of the item
 */
-	void setBaseClass(const std::string& baseClass);
+	void set_id(const std::string& id);
 
 
 protected:
 
 private:
+/** used to generate unique IDs
+*/
+	static unsigned int	idCounter;
+
 /** the name of the base class
 */
-	std::string	m_BaseClass;
+	std::string	m_ObjectName;
+
+/** the id of that object
+*/
+	std::string	m_id;
 
 };
 } // namespace doxyqml

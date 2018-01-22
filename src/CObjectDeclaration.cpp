@@ -34,9 +34,12 @@
 #  define LOG(...)
 #endif
 
-doxyqml::CObjectDeclaration::CObjectDeclaration(const std::string& filename)
+unsigned int	doxyqml::CObjectDeclaration::idCounter = 0;
+
+doxyqml::CObjectDeclaration::CObjectDeclaration(const std::string& objectName) :
+	m_ObjectName(objectName)
 {
-	NOTIFY_CONSTRUCTOR(5, "CObjectDeclaration", "const std::string& filename")
+	NOTIFY_CONSTRUCTOR(5, "CObjectDeclaration", "const std::string& objectName")
 //[Package_doxyqml/Package_ast/classes/class_CObjectDeclaration/operations/constructor/code.cpp]
 	//~~ CRootElement(const std::string& filename) [CRootElement] ~~
 //[EOF]
@@ -47,17 +50,23 @@ void doxyqml::CObjectDeclaration::print() const
 	NOTIFY_FUNCTION_CALL(this, 5, "CObjectDeclaration", "print", "", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CObjectDeclaration/operations/operation_print/code.cpp]
 	//~~ void print() [CObjectDeclaration] ~~
-	CQmlObject::print();
-	printf("//CObjectDeclaration\n");
+	if (m_id.empty())
+	{
+	    printf ("private: attr_%d %s;\n",idCounter++, m_ObjectName.c_str());
+	}
+	else
+	{
+	    printf ("private: %s %s;\n",m_id.c_str(), m_ObjectName.c_str());
+	}
 //[EOF]
 }
 
-void doxyqml::CObjectDeclaration::setBaseClass(const std::string& baseClass)
+void doxyqml::CObjectDeclaration::set_id(const std::string& id)
 {
-	NOTIFY_FUNCTION_CALL(this, 5, "CObjectDeclaration", "setBaseClass", "const std::string& baseClass", "void ")
-//[Package_doxyqml/Package_ast/classes/class_CObjectDeclaration/operations/operation_setBaseClass/code.cpp]
-	//~~ void setBaseClass(const std::string& baseClass) [CRootElement] ~~
-	m_BaseClass = baseClass;
+	NOTIFY_FUNCTION_CALL(this, 5, "CObjectDeclaration", "set_id", "const std::string& id", "void ")
+//[Package_doxyqml/Package_ast/classes/class_CObjectDeclaration/operations/operation_SIFFUBQD/code.cpp]
+	//~~ void set_id(const std::string& id) [CObjectDeclaration] ~~
+	m_id = id;
 //[EOF]
 }
 

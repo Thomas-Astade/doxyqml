@@ -23,6 +23,9 @@
 
 // Relation forward declarations:
 namespace doxyqml {
+class CObjectDeclaration;
+} // namespace doxyqml
+namespace doxyqml {
 class CQmlObject;
 } // namespace doxyqml
 
@@ -40,6 +43,11 @@ public:
 */
 	virtual void addChild(CQmlObject* child);
 
+/** used to add a subObjectt to the object
+@param child the new child
+*/
+	void addSubObject(CObjectDeclaration* child);
+
 /** construct from a text
 */
 	CRootElement();
@@ -47,6 +55,11 @@ public:
 /** print the generated code to stdout
 */
 	virtual void print() const;
+
+/** set the id of the curren sub item
+@param id the id of the item
+*/
+	void set_id(const std::string& id);
 
 /** accessor
 @param baseClass the new base class
@@ -67,6 +80,10 @@ protected:
 /** the member childs of the object
 */
 	std::vector<CQmlObject*>	myMemberChilds;
+
+/** the found sub objects
+*/
+	std::vector<CObjectDeclaration*>	mySubObjects;
 
 
 private:
