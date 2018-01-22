@@ -21,6 +21,7 @@
 #include "CObjectDeclaration.h"
 #include "CProperty.h"
 #include "CSignal.h"
+#include "CFunction.h"
 
 namespace classic = boost::spirit::classic;
 namespace qi = boost::spirit::qi;
@@ -65,6 +66,12 @@ void add_signal(const std::string& name, const boost::spirit::unused_type& it, b
     gRootObject.addChild(p);
 }
 
+void add_function(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+{
+    doxyqml::CFunction* p = new doxyqml::CFunction(name);
+    gRootObject.addChild(p);
+}
+
 void add_importline(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
 {
     doxyqml::CImport* p = new doxyqml::CImport(name);
@@ -105,6 +112,8 @@ struct qml_parser
         objectElement   =   comment
                         |   property[add_property]
                         |   signal[add_signal]
+                        |   function[add_function]
+                        |   objectDeclaration
                         ;
         
         topObjectDeclaration    = uppercaseIdentifier[add_Object][setMemberState]
@@ -115,14 +124,23 @@ struct qml_parser
                                 > qi::lit('}')
                                 ;
         
-        objectDeclaration   = uppercaseIdentifier[add_Object]
-                            > space
-                            > qi::lit('{')
-                            > space
-                            > *(objectElement > space)
-                            > qi::lit('}')
+        objectDeclaration   =   uppercaseIdentifier[add_Object]
+                            >   space
+                            >   qi::lit('{')
+                            >   space
+                            >   *(objectElement > space)
+                            >   qi::lit('}')
                             ;
         
+        function            =   qi::lit("function")
+                            >   space
+                            >   lowercaseIdentifier
+                            >   space
+                            >   paramList
+                            >   space
+                            >   inCurlyBrackets
+                            ;
+                            
         quotedText          = qi::lit('"')
                             > *(qi::lit("\\\\") | qi::lit("\\\"") | qi::alnum | qi::char_(" ,.;:_<>|~!§$%&/()=?{[]}'-"))
                             >  qi::lit('"')
@@ -141,6 +159,10 @@ struct qml_parser
                             >  qi::lit('}')
                             ;
                             
+        paramList           = qi::char_('(')
+                            > *(qi::char_ - ")")
+                            > qi::char_(')')
+                            ;
         
         space = *(qi::lit(' ') | qi::lit('\n') | qi::lit('\t'));
         multilineComment = confix("/*", "*/")[*(qi::char_ - "*/")];
@@ -166,7 +188,9 @@ struct qml_parser
     qi::rule<Iterator, std::string()> property;
     qi::rule<Iterator, std::string()> signal;
     qi::rule<Iterator, std::string()> quotedText;
-    qi::rule<Iterator, std::string()> inCurlyBrackets;
+    qi::rule<Iterator> inCurlyBrackets;
+    qi::rule<Iterator, std::string()> paramList;
+    qi::rule<Iterator, std::string()> function;
     qi::rule<Iterator, std::string()> someText;
     qi::rule<Iterator> comment;
 };
