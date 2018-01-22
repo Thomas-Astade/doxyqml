@@ -163,19 +163,20 @@ struct qml_parser
                             >>  space
                             >>  lowercaseIdentifier[set_id]
                             >>  space
-                            >>  *qi::lit(';')
+                            >>  -qi::lit(';')
                             ;
         
         valueText           =   *(qi::char_ - qi::eol - qi::char_('}'))
                             ;
         
-        propertySetting     =   qualifiedIdentifier
+        propertySetting     =   -(uppercaseIdentifier >> qi::lit('.'))
+                            >>  qualifiedIdentifier
                             >>  space
                             >>  qi::lit(':')
                             >>  space
                             >>  (objectDeclaration | valueText)
                             >>  space
-                            >>  *qi::lit(';')
+                            >>  -qi::lit(';')
                             ;
         
         objectDeclaration   =   uppercaseIdentifier[add_SubObject]
@@ -221,7 +222,8 @@ struct qml_parser
                             >>  qi::char_(')')
                             ;
         
-        slot                =   lowercaseIdentifier
+        slot                =   -qi::lit("Component.")
+                            >>  lowercaseIdentifier
                             >>  space
                             >>  qi::lit(':')
                             >>  space
