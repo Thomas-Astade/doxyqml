@@ -20,6 +20,7 @@
 #include "CImport.h"
 #include "CObjectDeclaration.h"
 #include "CProperty.h"
+#include "CSignal.h"
 
 namespace classic = boost::spirit::classic;
 namespace qi = boost::spirit::qi;
@@ -55,6 +56,12 @@ void add_singleline_comment(const std::string& name, const boost::spirit::unused
 void add_property(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
 {
     doxyqml::CProperty* p = new doxyqml::CProperty(name);
+    gRootObject.addChild(p);
+}
+
+void add_signal(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+{
+    doxyqml::CSignal* p = new doxyqml::CSignal(name);
     gRootObject.addChild(p);
 }
 
@@ -97,11 +104,13 @@ struct qml_parser
                         
         objectElement   =   comment
                         |   property[add_property]
+                        |   signal[add_signal]
                         ;
         
         topObjectDeclaration    = uppercaseIdentifier[add_Object][setMemberState]
                                 > space
                                 > qi::lit('{')
+                                > space
                                 > *(objectElement > space)
                                 > qi::lit('}')
                                 ;
@@ -138,6 +147,7 @@ struct qml_parser
         singlelineComment = confix("//", qi::eol)[*(qi::char_ - qi::eol)];
         importLine = confix("import", qi::eol)[*(qi::char_ - qi::eol)];
         property =  confix("property", qi::eol)[*(qi::char_ - qi::eol)];
+        signal =  confix("signal", qi::eol)[*(qi::char_ - qi::eol)];
         uppercaseIdentifier = qi::char_("A-Z") > *qi::char_("_a-zA-Z0-9");
         lowercaseIdentifier = qi::char_("a-z") > *qi::char_("_a-zA-Z0-9");
     }
@@ -154,6 +164,7 @@ struct qml_parser
     qi::rule<Iterator, std::string()> objectDeclaration;
     qi::rule<Iterator, std::string()> topObjectDeclaration;
     qi::rule<Iterator, std::string()> property;
+    qi::rule<Iterator, std::string()> signal;
     qi::rule<Iterator, std::string()> quotedText;
     qi::rule<Iterator, std::string()> inCurlyBrackets;
     qi::rule<Iterator, std::string()> someText;

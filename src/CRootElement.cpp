@@ -18,6 +18,8 @@
 
 #include "CRootElement.h"	 // own header
 
+// Relation includes:
+#include "CQmlObject.h"
 
 
 //****** Trace Macros ***************
@@ -41,7 +43,20 @@
 #  define LOG(...)
 #endif
 
-doxyqml::CRootElement::CRootElement()
+void doxyqml::CRootElement::addChild(CQmlObject* child)
+{
+	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "addChild", "CQmlObject* child", "void ")
+//[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_RXRCQJOW/code.cpp]
+	//~~ void addChild(CQmlObject* child) [CRootElement] ~~
+	if (state==0)
+	    myChilds.push_back(child);
+	else
+	    myMemberChilds.push_back(child);
+//[EOF]
+}
+
+doxyqml::CRootElement::CRootElement() :
+	state(0)
 {
 	NOTIFY_CONSTRUCTOR(5, "CRootElement", "")
 //[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/constructor/code.cpp]
@@ -55,11 +70,20 @@ void doxyqml::CRootElement::print() const
 //[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_print/code.cpp]
 	//~~ void print() [CRootElement] ~~
 	CQmlObject::print();
+	
+	printf("namespace %s {\n",m_Namespace.c_str());
 	printf("class %s ",m_Classname.c_str());
+	
 	if (!m_BaseClass.empty())
 	    printf(": public %s",m_BaseClass.c_str());
+	    
 	printf(" {\n");
+	
+	for (std::vector<CQmlObject*>::const_iterator it = myMemberChilds.begin(); it != myMemberChilds.end(); it++)
+	    (*it)->print();
+	    
 	printf("};\n");
+	printf("}\n");
 //[EOF]
 }
 
@@ -87,6 +111,31 @@ void doxyqml::CRootElement::setFilename(const std::string& filename)
 	pos = m_Classname.rfind('/');
 	if (pos != std::string::npos)
 	    m_Classname.erase(0,pos+1);
+	
+	m_Namespace = filename;
+	
+	pos = m_Namespace.rfind('/');
+	if (pos != std::string::npos)
+	    m_Namespace.erase(pos);
+	
+	
+	do {
+	    pos = m_Namespace.find('/');
+	    if (pos != std::string::npos)
+	    {
+	        m_Namespace.erase(pos,1);
+	        m_Namespace.insert(pos,"::");
+	    }
+	} while (pos != std::string::npos);
+//[EOF]
+}
+
+void doxyqml::CRootElement::setMemberState()
+{
+	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "setMemberState", "", "void ")
+//[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_JIUHNTZD/code.cpp]
+	//~~ void setMemberState() [CRootElement] ~~
+	state = 1;
 //[EOF]
 }
 

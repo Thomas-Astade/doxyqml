@@ -5,53 +5,49 @@
  * of the copyright to the underlying model at the time this code *
  * was generated; this code may be distributed under terms of     *
  * his/her/their choice.                                          */
-/** base class for QML objects
- *  @file CQmlObject.h
+/** a signal
+ *  @file CSignal.h
  ******************************************************************/
 
-#ifndef __CQMLOBJECT_H
-#  define __CQMLOBJECT_H
+#ifndef __CSIGNAL_H
+#  define __CSIGNAL_H
 
 //****** specification prolog ******
-//[Package_doxyqml/Package_ast/classes/class_CQmlObject/prolog.h]
-#include <vector>
+//[Package_doxyqml/Package_ast/classes/class_HKIHZWFT/prolog.h]
 #include <string>
 //[EOF]
 //**********************************
 
+// Relation includes:
+#include "CQmlObject.h"
 
 
 /** all doxyqml dependend classes
 */
 namespace doxyqml {
-/** base class for QML objects
+/** a signal
 */
-class CQmlObject
+class CSignal : public CQmlObject
 {
 
 public:
-/** used to add a child to the object
-@param child the new child
+/** construct from a text
+@param comment the text of the element
 */
-	virtual void addChild(CQmlObject* child);
+	CSignal(const std::string& comment);
 
 /** print the generated code to stdout
 */
-	virtual void print() const = 0;
-
-/** helper function tpo trimm a string
-@param s the sring to trim
-*/
-	const std::string trim(const std::string& s);
+	virtual void print() const;
 
 
 protected:
-/** the childs of the object
-*/
-	std::vector<CQmlObject*>	myChilds;
-
 
 private:
+/** the text of the comment
+*/
+	std::string	m_CommentText;
+
 };
 } // namespace doxyqml
 

@@ -21,6 +21,10 @@
 // Relation includes:
 #include "CQmlObject.h"
 
+// Relation forward declarations:
+namespace doxyqml {
+class CQmlObject;
+} // namespace doxyqml
 
 /** all doxyqml dependend classes
 */
@@ -31,6 +35,11 @@ class CRootElement : public CQmlObject
 {
 
 public:
+/** used to add a child to the object
+@param child the new child
+*/
+	virtual void addChild(CQmlObject* child);
+
 /** construct from a text
 */
 	CRootElement();
@@ -49,8 +58,16 @@ public:
 */
 	void setFilename(const std::string& filename);
 
+/** changes the object state
+*/
+	void setMemberState();
+
 
 protected:
+/** the member childs of the object
+*/
+	std::vector<CQmlObject*>	myMemberChilds;
+
 
 private:
 /** holds the filename of the root object
@@ -64,6 +81,16 @@ private:
 /** the name of the base class
 */
 	std::string	m_BaseClass;
+
+/** the parsing state:
+0: top
+1: members
+*/
+	unsigned int	state;
+
+/** The class namespace
+*/
+	std::string	m_Namespace;
 
 };
 } // namespace doxyqml

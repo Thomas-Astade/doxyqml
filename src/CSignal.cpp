@@ -5,11 +5,11 @@
  * of the copyright to the underlying model at the time this code *
  * was generated; this code may be distributed under terms of     *
  * his/her/their choice.                                          */
-/** a property
- *  @file CProperty.cpp
+/** a signal
+ *  @file CSignal.cpp
  ******************************************************************/
 
-#include "CProperty.h"	 // own header
+#include "CSignal.h"	 // own header
 
 
 
@@ -34,21 +34,21 @@
 #  define LOG(...)
 #endif
 
-doxyqml::CProperty::CProperty(const std::string& comment)
+doxyqml::CSignal::CSignal(const std::string& comment)
 {
-	NOTIFY_CONSTRUCTOR(5, "CProperty", "const std::string& comment")
-//[Package_doxyqml/Package_ast/classes/class_CProperty/operations/constructor/code.cpp]
+	NOTIFY_CONSTRUCTOR(5, "CSignal", "const std::string& comment")
+//[Package_doxyqml/Package_ast/classes/class_HKIHZWFT/operations/constructor_GLOFHTZW/code.cpp]
 	//~~ CProperty(const std::string& comment) [CProperty] ~~
 	m_CommentText = trim(comment);
 //[EOF]
 }
 
-void doxyqml::CProperty::print() const
+void doxyqml::CSignal::print() const
 {
-	NOTIFY_FUNCTION_CALL(this, 5, "CProperty", "print", "", "void ")
-//[Package_doxyqml/Package_ast/classes/class_CProperty/operations/operation_print/code.cpp]
-	//~~ void print() [CProperty] ~~
-	printf("public: Q_PROPERTY(%s);\n",m_CommentText.c_str());
+	NOTIFY_FUNCTION_CALL(this, 5, "CSignal", "print", "", "void ")
+//[Package_doxyqml/Package_ast/classes/class_HKIHZWFT/operations/operation_ELRHBZPO/code.cpp]
+	//~~ void print() [CSignal] ~~
+	printf("Q_SIGNALS: %s;\n",m_CommentText.c_str());
 //[EOF]
 }
 
