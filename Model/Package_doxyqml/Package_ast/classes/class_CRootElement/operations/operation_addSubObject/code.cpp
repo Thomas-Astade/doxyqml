@@ -1,3 +1,3 @@
 //~~ void addSubObject(CObjectDeclaration* child) [CRootElement] ~~
-mySubObjects.push_back(child);
+lastSubObject = child;
 myMemberChilds.push_back(child);

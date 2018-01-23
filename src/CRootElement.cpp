@@ -78,8 +78,8 @@ void doxyqml::CRootElement::add_namespace(const std::string& Namespace)
 	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "add_namespace", "const std::string& Namespace", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_add_namespace/code.cpp]
 	//~~ void add_namespace(const std::string& Namespace) [CRootElement] ~~
-	if (!mySubObjects.empty())
-	    mySubObjects.back()->add_namespace(Namespace);
+	if (lastSubObject != 0)
+	    lastSubObject->add_namespace(Namespace);
 	else
 	{
 	    m_BaseClass += "::";
@@ -105,12 +105,13 @@ void doxyqml::CRootElement::addSubObject(CObjectDeclaration* child)
 	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "addSubObject", "CObjectDeclaration* child", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_addSubObject/code.cpp]
 	//~~ void addSubObject(CObjectDeclaration* child) [CRootElement] ~~
-	mySubObjects.push_back(child);
+	lastSubObject = child;
 	myMemberChilds.push_back(child);
 //[EOF]
 }
 
 doxyqml::CRootElement::CRootElement() :
+	lastSubObject(0),
 	state(0)
 {
 	NOTIFY_CONSTRUCTOR(5, "CRootElement", "")
@@ -148,8 +149,8 @@ void doxyqml::CRootElement::set_id(const std::string& id)
 	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "set_id", "const std::string& id", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_set_id/code.cpp]
 	//~~ void set_id(const std::string& id) [CRootElement] ~~
-	if (!mySubObjects.empty())
-	    mySubObjects.back()->set_id(id);
+	if (lastSubObject != 0)
+	    lastSubObject->set_id(id);
 //[EOF]
 }
 

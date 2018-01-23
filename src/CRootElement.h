@@ -111,13 +111,13 @@ public:
 
 
 protected:
+/** the last found sub object
+*/
+	CObjectDeclaration*	lastSubObject;
+
 /** the member childs of the object
 */
 	std::vector<CQmlObject*>	myMemberChilds;
-
-/** the found sub objects
-*/
-	std::vector<CObjectDeclaration*>	mySubObjects;
 
 
 private:
