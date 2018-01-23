@@ -168,7 +168,7 @@ struct qml_parser
                             >>  -qi::lit(';')
                             ;
         
-        valueText           =   *(qi::char_ - qi::eol - qi::char_('}'))
+        valueText           =   *(inCurlyBrackets | (qi::char_ - qi::eol - qi::char_('}')))
                             ;
         
         propertySetting     =   -(uppercaseIdentifier >> qi::lit('.'))
@@ -213,9 +213,10 @@ struct qml_parser
         someText            =   qi::lit(' ') 
                             |   qi::lit('\n') 
                             |   qi::lit('\t')
-                            |   qi::alnum 
-                            |   qi::char_(",.;:_<>|~!*§$%&/()=?[]'-\\\"") 
                             |   inCurlyBrackets
+                            |   quotedText
+                            |   qi::alnum 
+                            |   qi::char_("^,.;:_<>|~!*§$%&/()=?[]'-\\") 
                             ;
                             
         inCurlyBrackets     =   qi::lit('{')
