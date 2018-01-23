@@ -153,6 +153,7 @@ struct qml_parser
                         ;
         
         topObjectDeclaration    = uppercaseIdentifier[setBasename]
+                                >>  *(qi::char_('.') >> uppercaseIdentifier[add_namespace])
                                 > space
                                 > qi::lit('{')
                                 > space
