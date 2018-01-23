@@ -149,6 +149,7 @@ struct qml_parser
                         |   idText
                         |   slot
                         |   propertySetting
+                        |   structPropertySetting
                         ;
         
         topObjectDeclaration    = uppercaseIdentifier[setBasename]
@@ -178,6 +179,11 @@ struct qml_parser
                             >>  space
                             >>  -qi::lit(';')
                             ;
+                            
+        structPropertySetting = lowercaseIdentifier
+                            >>  space
+                            >>  inCurlyBrackets
+                            ;
         
         objectDeclaration   =   uppercaseIdentifier[add_SubObject]
                             >>  *(qi::char_('.') >> uppercaseIdentifier[add_namespace])
@@ -190,8 +196,7 @@ struct qml_parser
         
         function            =   qi::lit("function")
                             >>  space
-                            >>  lowercaseIdentifier
-                            >>  space
+                            >>  -(lowercaseIdentifier >>  space)
                             >>  paramList
                             >>  space
                             >>  inCurlyBrackets
@@ -227,7 +232,7 @@ struct qml_parser
                             >>  space
                             >>  qi::lit(':')
                             >>  space
-                            >>  inCurlyBrackets
+                            >>  (function | inCurlyBrackets)
                             ;
                             
         namespaceImportLine = qi::lit("import")
@@ -270,6 +275,7 @@ struct qml_parser
     qi::rule<Iterator, std::string()> valueText;
     qi::rule<Iterator> inCurlyBrackets;
     qi::rule<Iterator> propertySetting;
+    qi::rule<Iterator> structPropertySetting;
     qi::rule<Iterator> slot;
     qi::rule<Iterator, std::string()> paramList;
     qi::rule<Iterator, std::string()> function;
