@@ -106,6 +106,7 @@ void doxyqml::CRootElement::addSubObject(CObjectDeclaration* child)
 //[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_addSubObject/code.cpp]
 	//~~ void addSubObject(CObjectDeclaration* child) [CRootElement] ~~
 	mySubObjects.push_back(child);
+	myMemberChilds.push_back(child);
 //[EOF]
 }
 
@@ -123,9 +124,10 @@ void doxyqml::CRootElement::print() const
 	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "print", "", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_print/code.cpp]
 	//~~ void print() [CRootElement] ~~
+	printf("namespace %s {\n",m_Namespace.c_str());
+	
 	CQmlObject::print();
 	
-	printf("namespace %s {\n",m_Namespace.c_str());
 	printf("class %s ",m_Classname.c_str());
 	
 	if (!m_BaseClass.empty())
@@ -135,9 +137,7 @@ void doxyqml::CRootElement::print() const
 	
 	for (std::vector<CQmlObject*>::const_iterator it = myMemberChilds.begin(); it != myMemberChilds.end(); it++)
 	    (*it)->print();
-	for (std::vector<CObjectDeclaration*>::const_iterator it = mySubObjects.begin(); it != mySubObjects.end(); it++)
-	    (*it)->print();
-	    
+	
 	printf("};\n");
 	printf("}\n");
 //[EOF]
