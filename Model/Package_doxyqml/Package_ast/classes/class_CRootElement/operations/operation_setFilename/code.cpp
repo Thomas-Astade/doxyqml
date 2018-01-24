@@ -12,7 +12,11 @@ if (pos != std::string::npos)
 
 m_Namespace = filename;
 
-pos = m_Namespace.find("/qml/");
+const char* qml_strip = getenv("doxyqml_strip");
+if (qml_strip == 0)
+    qml_strip = "/qml/";
+
+pos = m_Namespace.find(qml_strip);
 if (pos != std::string::npos)
     m_Namespace.erase(0,pos+1);
 

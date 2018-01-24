@@ -371,7 +371,15 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 }
 
 static char doc[] =
-"doxyqml -- A program to convert qml to pseudo C++ for doxygen.";
+"doxyqml -- A program to convert qml to pseudo C++ for doxygen.\n"
+"\n"
+"doxyqml generates namespaces from filepath.\n"
+"If you want to strip some path information\nyou can define an environment variable \"doxyqml_strip\"\n"
+"If the variable is not defined,\n    \"/qml/\" is assumed\n"
+"So a file \"/home/thomas/myProg/src/qml/main.qml\" results in a\n    classname: \"qml::main\"\n"
+"if you use \"export doxyqml_strip=/myProg/\" it'll results in the\n    classname: \"myProg::qml::main\"\n"
+"\n"
+;
 
 /* A description of the arguments we accept. */
 static char args_doc[] = "qml_file";
