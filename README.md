@@ -70,3 +70,8 @@ parameter name.
      * @param user The user which logged in
      */
     signal loggedIn(User user)
+
+### Useful Links
+
+The official QML syntax is located here: http://code.qt.io/cgit/qt/qtdeclarative.git/tree/src/qml/parser/qqmljs.g
+
