@@ -171,6 +171,7 @@ struct qml_parser
                         ;
                         
         objectElement   =   comment
+                        |   onCompletionHandler
                         |   property[add_property]
                         |   signal[add_signal]
                         |   function[add_function]
@@ -266,6 +267,13 @@ struct qml_parser
                             >>  (function | inCurlyBrackets)
                             ;
                             
+        onCompletionHandler =   (qi::lit("Component.onCompleted") | qi::lit("Component.onDestruction"))
+                            >>  space
+                            >>  qi::lit(':')
+                            >>  space
+                            >>  inCurlyBrackets
+                            ;
+        
         namespaceImportLine = qi::lit("import")
                             >>  space
                             >>  quotedText[setNamespaceText]
@@ -312,6 +320,7 @@ struct qml_parser
     qi::rule<Iterator, std::string()> function;
     qi::rule<Iterator, std::string()> someText;
     qi::rule<Iterator> comment;
+    qi::rule<Iterator> onCompletionHandler;
 };
 
 // wrap forward iterator with position iterator, to record the position
