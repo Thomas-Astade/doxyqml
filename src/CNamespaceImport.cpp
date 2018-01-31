@@ -94,6 +94,9 @@ void doxyqml::CNamespaceImport::print() const
 	NOTIFY_FUNCTION_CALL(this, 5, "CNamespaceImport", "print", "", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CNamespaceImport/operations/operation_print/code.cpp]
 	//~~ void print() [CNamespaceImport] ~~
+	if ((m_NamespaceName+"::") == m_filename)
+	    printf("// ");
+	
 	printf("namespace %s = %s;\n",m_NamespaceName.c_str(),m_filename.c_str());
 //[EOF]
 }
