@@ -34,6 +34,8 @@ SUCH DAMAGE.
 #include <vector>
 #include <string>
 #include <iomanip>
+#include <regex>
+#include <fstream>
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/classic_position_iterator.hpp>
 #include <boost/spirit/repository/include/qi_confix.hpp>
@@ -428,8 +430,38 @@ int main (int argc, char **argv)
 {
     /* Where the magic happens */
     argp_parse (&argp, argc, argv, 0, 0, &arguments);
+    
     if (!arguments.filename.empty())
+    {
+        std::string qmldir(arguments.filename);
+        size_t pos = qmldir.rfind('/');
+        if (pos != std::string::npos)
+            qmldir.erase(pos);
+
+        qmldir += "/qmldir";
+        std::ifstream qmldirText;
+        qmldirText.open(qmldir.c_str());
+        
+        if (qmldirText.good())
+        {
+            std::string line;
+            std::regex e("^module\\s+((?:\\w|\\.)+)\\s*$"); // the pattern
+            while (getline(qmldirText, line))
+            {
+                std::cmatch cm;
+                bool match = regex_search(line.c_str(), cm, e);
+                if (match)
+                {
+                    std::string s(cm[1]);
+                    gRootObject.setNamespace(s);
+                }
+            }
+        }
+
+        qmldirText.close();
+
         load(arguments.filename);
+    }
     gRootObject.print();
     return 0;
 }
