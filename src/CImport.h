@@ -51,21 +51,21 @@ SUCH DAMAGE.
 #include "CQmlObject.h"
 
 
-/** all doxyqml dependend classes
+/** @brief all doxyqml dependend classes
 */
 namespace doxyqml {
-/** an import
+/** @brief an import
 */
 class CImport : public CQmlObject
 {
 
 public:
-/** construct from a text
+/** @brief construct from a text
 @param importLine the text of the element
 */
 	CImport(const std::string& importLine);
 
-/** print the generated code to stdout
+/** @brief print the generated code to stdout
 */
 	virtual void print() const;
 
@@ -73,7 +73,7 @@ public:
 protected:
 
 private:
-/** the text of the import line
+/** @brief the text of the import line
 */
 	std::string	m_ImportLineText;
 

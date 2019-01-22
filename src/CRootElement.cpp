@@ -179,40 +179,43 @@ void doxyqml::CRootElement::setFilename(const std::string& filename)
 	if (pos != std::string::npos)
 	    m_Classname.erase(0,pos+1);
 	
-	m_Namespace = filename;
+	if (m_Namespace.empty())
+	{
+	    m_Namespace = filename;
 	
-	const char* qml_strip = getenv("doxyqml_strip");
-	if (qml_strip == 0)
-	    qml_strip = "/qml/";
+	    const char* qml_strip = getenv("doxyqml_strip");
+	    if (qml_strip == 0)
+	        qml_strip = "/qml/";
 	
-	pos = m_Namespace.find(qml_strip);
-	if (pos != std::string::npos)
-	    m_Namespace.erase(0,pos+1);
-	
-	pos = m_Namespace.rfind('/');
-	if (pos != std::string::npos)
-	    m_Namespace.erase(pos);
-	
-	do {
-	    pos = m_Namespace.find("../");
+	    pos = m_Namespace.find(qml_strip);
 	    if (pos != std::string::npos)
-	        m_Namespace.erase(pos,3);
-	} while (pos != std::string::npos);
+	        m_Namespace.erase(0,pos+1);
 	
-	do {
-	    pos = m_Namespace.find("./");
+	    pos = m_Namespace.rfind('/');
 	    if (pos != std::string::npos)
-	        m_Namespace.erase(pos,2);
-	} while (pos != std::string::npos);
+	        m_Namespace.erase(pos);
 	
-	do {
-	    pos = m_Namespace.find('/');
-	    if (pos != std::string::npos)
-	    {
-	        m_Namespace.erase(pos,1);
-	        m_Namespace.insert(pos,"::");
-	    }
-	} while (pos != std::string::npos);
+	    do {
+	        pos = m_Namespace.find("../");
+	        if (pos != std::string::npos)
+	            m_Namespace.erase(pos,3);
+	    } while (pos != std::string::npos);
+	
+	    do {
+	        pos = m_Namespace.find("./");
+	        if (pos != std::string::npos)
+	            m_Namespace.erase(pos,2);
+	    } while (pos != std::string::npos);
+	
+	    do {
+	        pos = m_Namespace.find('/');
+	        if (pos != std::string::npos)
+	        {
+	            m_Namespace.erase(pos,1);
+	            m_Namespace.insert(pos,"::");
+	        }
+	    } while (pos != std::string::npos);
+	}
 //[EOF]
 }
 
@@ -222,6 +225,25 @@ void doxyqml::CRootElement::setMemberState()
 //[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_setMemberState/code.cpp]
 	//~~ void setMemberState() [CRootElement] ~~
 	state = 1;
+//[EOF]
+}
+
+void doxyqml::CRootElement::setNamespace(const std::string& Namespace)
+{
+	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "setNamespace", "const std::string& Namespace", "void ")
+//[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_SYLDGZGK/code.cpp]
+	//~~ void setNamespace(const std::string& Namespace) [CRootElement] ~~
+	m_Namespace = Namespace;
+	size_t pos;
+	
+	do {
+	    pos = m_Namespace.find('.');
+	    if (pos != std::string::npos)
+	    {
+	        m_Namespace.erase(pos,1);
+	        m_Namespace.insert(pos,"::");
+	    }
+	} while (pos != std::string::npos);
 //[EOF]
 }
 

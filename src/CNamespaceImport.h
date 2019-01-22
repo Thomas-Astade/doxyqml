@@ -51,22 +51,22 @@ SUCH DAMAGE.
 #include "CQmlObject.h"
 
 
-/** all doxyqml dependend classes
+/** @brief all doxyqml dependend classes
 */
 namespace doxyqml {
-/** an import with namespace
+/** @brief an import with namespace
 */
 class CNamespaceImport : public CQmlObject
 {
 
 public:
-/** construct from a text
+/** @brief construct from a text
 @param filename the text of the element
 @param namespaceName the text of the element
 */
 	CNamespaceImport(const std::string& filename, const std::string& namespaceName);
 
-/** print the generated code to stdout
+/** @brief print the generated code to stdout
 */
 	virtual void print() const;
 
@@ -74,11 +74,11 @@ public:
 protected:
 
 private:
-/** the text of the import line
+/** @brief the text of the import line
 */
 	std::string	m_filename;
 
-/** the text of the import line
+/** @brief the text of the import line
 */
 	std::string	m_NamespaceName;
 

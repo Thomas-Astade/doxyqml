@@ -72,7 +72,7 @@ SUCH DAMAGE.
 void doxyqml::CQmlObject::addChild(CQmlObject* child)
 {
 	NOTIFY_FUNCTION_CALL(this, 5, "CQmlObject", "addChild", "CQmlObject* child", "void ")
-//[Package_doxyqml/Package_ast/classes/class_CQmlObject/operations/operation_addChild_1/code.cpp]
+//[Package_doxyqml/Package_ast/classes/class_CQmlObject/operations/operation_addChild/code.cpp]
 	//~~ void addChild(CQmlObject* child) [CQmlObject] ~~
 	myChilds.push_back(child);
 //[EOF]

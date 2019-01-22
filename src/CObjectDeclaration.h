@@ -51,30 +51,30 @@ SUCH DAMAGE.
 #include "CQmlObject.h"
 
 
-/** all doxyqml dependend classes
+/** @brief all doxyqml dependend classes
 */
 namespace doxyqml {
-/** a declared object
+/** @brief a declared object
 */
 class CObjectDeclaration : public CQmlObject
 {
 
 public:
-/** set the namespace of the current sub item
+/** @brief set the namespace of the current sub item
 @param Namespace the namespace of the item
 */
 	void add_namespace(const std::string& Namespace);
 
-/** construct from a text
+/** @brief construct from a text
 @param objectName the text of the element
 */
 	CObjectDeclaration(const std::string& objectName);
 
-/** print the generated code to stdout
+/** @brief print the generated code to stdout
 */
 	virtual void print() const;
 
-/** set the id of the curren sub item
+/** @brief set the id of the curren sub item
 @param id the id of the item
 */
 	void set_id(const std::string& id);
@@ -87,11 +87,11 @@ private:
 */
 	static unsigned int	idCounter;
 
-/** the name of the base class
+/** @brief the name of the base class
 */
 	std::string	m_ObjectName;
 
-/** the id of that object
+/** @brief the id of that object
 */
 	std::string	m_id;
 

@@ -50,32 +50,32 @@ SUCH DAMAGE.
 
 
 
-/** all doxyqml dependend classes
+/** @brief all doxyqml dependend classes
 */
 namespace doxyqml {
-/** base class for QML objects
+/** @brief base class for QML objects
 */
 class CQmlObject
 {
 
 public:
-/** used to add a child to the object
+/** @brief used to add a child to the object
 @param child the new child
 */
-	virtual void addChild(CQmlObject* child);
+	void addChild(CQmlObject* child);
 
-/** print the generated code to stdout
+/** @brief print the generated code to stdout
 */
 	virtual void print() const = 0;
 
-/** helper function tpo trimm a string
+/** @brief helper function tpo trimm a string
 @param s the sring to trim
 */
 	const std::string trim(const std::string& s);
 
 
 protected:
-/** the childs of the object
+/** @brief the childs of the object
 */
 	std::vector<CQmlObject*>	myChilds;
 

@@ -51,21 +51,21 @@ SUCH DAMAGE.
 #include "CQmlObject.h"
 
 
-/** all doxyqml dependend classes
+/** @brief all doxyqml dependend classes
 */
 namespace doxyqml {
-/** a property
+/** @brief a property
 */
 class CProperty : public CQmlObject
 {
 
 public:
-/** construct from a text
+/** @brief construct from a text
 @param comment the text of the element
 */
 	CProperty(const std::string& comment);
 
-/** print the generated code to stdout
+/** @brief print the generated code to stdout
 */
 	virtual void print() const;
 
@@ -73,7 +73,7 @@ public:
 protected:
 
 private:
-/** the text of the comment
+/** @brief the text of the comment
 */
 	std::string	m_CommentText;
 

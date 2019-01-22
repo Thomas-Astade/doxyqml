@@ -58,88 +58,93 @@ namespace doxyqml {
 class CQmlObject;
 } // namespace doxyqml
 
-/** all doxyqml dependend classes
+/** @brief all doxyqml dependend classes
 */
 namespace doxyqml {
-/** the root of the abstract syntax tree
+/** @brief the root of the abstract syntax tree
 */
 class CRootElement : public CQmlObject
 {
 
 public:
-/** set the namespace of the current sub item
+/** @brief set the namespace of the current sub item
 @param Namespace the namespace of the item
 */
 	void add_namespace(const std::string& Namespace);
 
-/** used to add a child to the object
+/** @brief used to add a child to the object
 @param child the new child
 */
 	virtual void addChild(CQmlObject* child);
 
-/** used to add a subObjectt to the object
+/** @brief used to add a subObjectt to the object
 @param child the new child
 */
 	void addSubObject(CObjectDeclaration* child);
 
-/** construct from a text
+/** @brief construct from a text
 */
 	CRootElement();
 
-/** print the generated code to stdout
+/** @brief print the generated code to stdout
 */
 	virtual void print() const;
 
-/** set the id of the curren sub item
+/** @brief set the id of the curren sub item
 @param id the id of the item
 */
 	void set_id(const std::string& id);
 
-/** accessor
+/** @brief accessor
 @param baseClass the new base class
 */
 	void setBaseClass(const std::string& baseClass);
 
-/** accessor
+/** @brief accessor
 @param filename the text of the element
 */
 	void setFilename(const std::string& filename);
 
-/** changes the object state
+/** @brief changes the object state
 */
 	void setMemberState();
 
+/** @brief accessor
+@param Namespace the text of the element
+*/
+	void setNamespace(const std::string& Namespace);
+
 
 protected:
-/** the last found sub object
+/** @brief the last found sub object
 */
 	CObjectDeclaration*	lastSubObject;
 
-/** the member childs of the object
+/** @brief the member childs of the object
 */
 	std::vector<CQmlObject*>	myMemberChilds;
 
 
 private:
-/** holds the filename of the root object
+/** @brief holds the filename of the root object
 */
 	std::string	m_Filename;
 
-/** holds the classname of the root object
+/** @brief holds the classname of the root object
 */
 	std::string	m_Classname;
 
-/** the name of the base class
+/** @brief the name of the base class
 */
 	std::string	m_BaseClass;
 
-/** the parsing state:
+/** @brief the parsing state:
 0: top
 1: members
 */
 	unsigned int	state;
 
-/** The class namespace
+/** @brief The class namespace
 */
 	std::string	m_Namespace;
 
