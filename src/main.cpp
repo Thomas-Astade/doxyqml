@@ -174,7 +174,7 @@ struct qml_parser
                         
         objectElement   =   comment
                         |   onCompletionHandler
-                        |   property[add_property]
+                        |   -(qi::lit("readonly") >> space) >> property[add_property]
                         |   signal[add_signal]
                         |   function[add_function]
                         |   objectDeclaration
@@ -208,7 +208,7 @@ struct qml_parser
                             >>  space
                             >>  qi::lit(':')
                             >>  space
-                            >>  (objectDeclaration | valueText)
+                            >>  (valueText | objectDeclaration)
                             >>  space
                             >>  -qi::lit(';')
                             ;
@@ -273,7 +273,7 @@ struct qml_parser
                             >>  space
                             >>  qi::lit(':')
                             >>  space
-                            >>  inCurlyBrackets
+                            >>  (inCurlyBrackets | (qi::char_ - qi::eol - qi::char_('}')))
                             ;
         
         namespaceImportLine = qi::lit("import")

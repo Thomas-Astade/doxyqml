@@ -8,6 +8,18 @@ do {
 } while (pos != std::string::npos);
 
 do {
+    pos = m_filename.find("qrc:/");
+    if (pos == 0)
+        m_filename.erase(pos,5);
+} while (pos != std::string::npos);
+
+do {
+    pos = m_filename.find("qrc:");
+    if (pos == 0)
+        m_filename.erase(pos,4);
+} while (pos != std::string::npos);
+
+do {
     pos = m_filename.find('/');
     if (pos != std::string::npos)
     {
