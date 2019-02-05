@@ -273,7 +273,7 @@ struct qml_parser
                             >>  space
                             >>  qi::lit(':')
                             >>  space
-                            >>  (inCurlyBrackets | (qi::char_ - qi::eol - qi::char_('}')))
+                            >>  (inCurlyBrackets | *(qi::char_ - qi::eol - qi::char_('}')))
                             ;
         
         namespaceImportLine = qi::lit("import")
