@@ -187,6 +187,7 @@ struct qml_parser
         topObjectDeclaration    = uppercaseIdentifier[setBasename]
                                 >>  *(qi::char_('.') >> uppercaseIdentifier[add_namespace])
                                 > space
+                                > *(qi::lit("on") > space > lowercaseIdentifier > space)
                                 > qi::lit('{')
                                 > space
                                 > *(objectElement > space)
@@ -221,6 +222,7 @@ struct qml_parser
         objectDeclaration   =   uppercaseIdentifier[add_SubObject]
                             >>  *(qi::char_('.') >> uppercaseIdentifier[add_namespace])
                             >>  space
+                            >> *(qi::lit("on") > space > lowercaseIdentifier > space)
                             >>  qi::lit('{')
                             >>  space
                             >>  *(objectElement > space)
