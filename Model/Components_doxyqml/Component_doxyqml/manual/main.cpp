@@ -375,7 +375,7 @@ bool load(const std::string& filename)
 
 
 const char *argp_program_version =
-"doxyqml 2.1";
+"doxyqml 2.2";
 
 const char *argp_program_bug_address =
 "<t.spitzer@astade.de>";
