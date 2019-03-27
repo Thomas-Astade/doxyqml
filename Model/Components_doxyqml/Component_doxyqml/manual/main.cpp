@@ -287,11 +287,30 @@ struct qml_parser
                             >>  uppercaseIdentifier[setNamespaceIdentifier]
                             ;
         
+        property            = object_property | single_line_property;
+        
+        single_line_property  =  confix("property", qi::eol)[*(qi::char_ - qi::eol)];
+        
+        object_property     =   qi::lit("property")
+                            >>  space
+                            >>  uppercaseIdentifier
+                            >>  qi::char_(" \t")
+                            >>  space
+                            >>  lowercaseIdentifier
+                            >>  space
+                            >>  qi::lit(':')
+                            >>  space
+                            >>  uppercaseIdentifier
+                            >>  space
+                            >>  inCurlyBrackets
+                            ;
+                           
+
+
         space = *(qi::lit(' ') | qi::lit('\n') | qi::lit('\t'));
         multilineComment = confix("/*", "*/")[*(qi::char_ - "*/")];
         singlelineComment = confix("//", qi::eol)[*(qi::char_ - qi::eol)];
         importLine = confix("import", qi::eol)[*(qi::char_ - qi::eol)];
-        property =  confix("property", qi::eol)[*(qi::char_ - qi::eol)];
         signal =  confix("signal", qi::eol)[*(qi::char_ - qi::eol)];
         uppercaseIdentifier = qi::char_("A-Z") > *qi::char_("_a-zA-Z0-9");
         lowercaseIdentifier = qi::char_("a-z") > *qi::char_("_a-zA-Z0-9");
@@ -312,6 +331,8 @@ struct qml_parser
     qi::rule<Iterator, std::string()> objectDeclaration;
     qi::rule<Iterator, std::string()> topObjectDeclaration;
     qi::rule<Iterator, std::string()> property;
+    qi::rule<Iterator, std::string()> single_line_property;
+    qi::rule<Iterator, std::string()> object_property;
     qi::rule<Iterator, std::string()> signal;
     qi::rule<Iterator, std::string()> quotedText;
     qi::rule<Iterator, std::string()> idText;
