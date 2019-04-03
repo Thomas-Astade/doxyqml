@@ -289,7 +289,12 @@ struct qml_parser
         
         property            = object_property | single_line_property;
         
-        single_line_property  =  confix("property", qi::eol)[*(qi::char_ - qi::eol)];
+        tillEndOfLine       =  *(qi::char_ - qi::eol);
+        
+        single_line_property  =  qi::lit("property")
+                              >> *(qi::char_ - qi::lit(':') - qi::eol)
+                              >> tillEndOfLine
+                              ;
         
         object_property     =   qi::lit("property")
                             >>  space
@@ -320,6 +325,7 @@ struct qml_parser
     qi::rule<Iterator, std::string()> singlelineComment;
     qi::rule<Iterator, std::string()> importLine;
     qi::rule<Iterator> namespaceImportLine;
+    qi::rule<Iterator> tillEndOfLine;
     qi::rule<Iterator, std::string()> uppercaseIdentifier;
     qi::rule<Iterator, std::string()> lowercaseIdentifier;
     qi::rule<Iterator, std::string()> qualifiedIdentifier;
