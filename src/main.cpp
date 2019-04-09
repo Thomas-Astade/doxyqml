@@ -174,7 +174,7 @@ struct qml_parser
                         
         objectElement   =   comment
                         |   onCompletionHandler
-                        |   -(qi::lit("readonly") >> space) >> property[add_property]
+                        |   -(qi::lit("readonly") >> space) >> -(qi::lit("default") >> space) >> property[add_property]
                         |   signal[add_signal]
                         |   function[add_function]
                         |   objectDeclaration
@@ -212,6 +212,7 @@ struct qml_parser
                             >>  (valueText | objectDeclaration)
                             >>  space
                             >>  -qi::lit(';')
+                            >> *(space >> qi::lit(':') >> tillEndOfLine)
                             ;
                             
         structPropertySetting = lowercaseIdentifier
@@ -233,6 +234,8 @@ struct qml_parser
                             >>  space
                             >>  -(lowercaseIdentifier >>  space)
                             >>  paramList
+                            >>  space
+                            >>  -(qi::lit("//") >> tillEndOfLine)
                             >>  space
                             >>  inCurlyBrackets
                             ;
@@ -294,6 +297,7 @@ struct qml_parser
         single_line_property  =  qi::lit("property")
                               >> *(qi::char_ - qi::lit(':') - qi::eol)
                               >> tillEndOfLine
+                              >> *(space >> qi::lit(':') >> tillEndOfLine)
                               ;
         
         object_property     =   qi::lit("property")
