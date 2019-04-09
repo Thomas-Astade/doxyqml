@@ -183,6 +183,18 @@ struct qml_parser
                         |   propertySetting
                         |   structPropertySetting
                         ;
+                        
+        subObjectElement   =   comment
+                        |   onCompletionHandler
+                        |   -(qi::lit("readonly") >> space) >> -(qi::lit("default") >> space) >> property
+                        |   signal
+                        |   function
+                        |   objectDeclaration
+                        |   idText
+                        |   slot
+                        |   propertySetting
+                        |   structPropertySetting
+                        ;
         
         topObjectDeclaration    = uppercaseIdentifier[setBasename]
                                 >>  *(qi::char_('.') >> uppercaseIdentifier[add_namespace])
@@ -226,7 +238,7 @@ struct qml_parser
                             >> *(qi::lit("on") > space > lowercaseIdentifier > space)
                             >>  qi::lit('{')
                             >>  space
-                            >>  *(objectElement > space)
+                            >>  *(subObjectElement > space)
                             >>  qi::lit('}')
                             ;
         
@@ -337,6 +349,7 @@ struct qml_parser
     qi::rule<Iterator> rootElements;
     qi::rule<Iterator, std::string()> topElement;
     qi::rule<Iterator> objectElement;
+    qi::rule<Iterator> subObjectElement;
     qi::rule<Iterator> space;
     qi::rule<Iterator, std::string()> objectDeclaration;
     qi::rule<Iterator, std::string()> topObjectDeclaration;
