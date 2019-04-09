@@ -62,8 +62,9 @@ class CProperty : public CQmlObject
 public:
 /** @brief construct from a text
 @param comment the text of the element
+@param internal this property is internal
 */
-	CProperty(const std::string& comment);
+	CProperty(const std::string& comment, bool internal);
 
 /** @brief print the generated code to stdout
 */
@@ -76,6 +77,10 @@ private:
 /** @brief the text of the comment
 */
 	std::string	m_CommentText;
+
+/** @brief is the property only internal?
+*/
+	bool	m_internal;
 
 };
 } // namespace doxyqml

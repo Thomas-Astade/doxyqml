@@ -1,2 +1,5 @@
 //~~ void print() [CFunction] ~~
-printf("public: void %s;\n",m_CommentText.c_str());
+if (!m_internal)
+{
+    printf("public: void %s;\n",m_CommentText.c_str());
+}

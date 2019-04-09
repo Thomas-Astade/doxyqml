@@ -63,9 +63,10 @@ SUCH DAMAGE.
 #  define LOG(...)
 #endif
 
-doxyqml::CFunction::CFunction(const std::string& comment)
+doxyqml::CFunction::CFunction(const std::string& comment, bool internal) :
+	m_internal(internal)
 {
-	NOTIFY_CONSTRUCTOR(5, "CFunction", "const std::string& comment")
+	NOTIFY_CONSTRUCTOR(5, "CFunction", "const std::string& comment, bool internal")
 //[Package_doxyqml/Package_ast/classes/class_CFunction/operations/constructor/code.cpp]
 	//~~ CProperty(const std::string& comment) [CProperty] ~~
 	m_CommentText = trim(comment);
@@ -77,7 +78,10 @@ void doxyqml::CFunction::print() const
 	NOTIFY_FUNCTION_CALL(this, 5, "CFunction", "print", "", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CFunction/operations/operation_print/code.cpp]
 	//~~ void print() [CFunction] ~~
-	printf("public: void %s;\n",m_CommentText.c_str());
+	if (!m_internal)
+	{
+	    printf("public: void %s;\n",m_CommentText.c_str());
+	}
 //[EOF]
 }
 

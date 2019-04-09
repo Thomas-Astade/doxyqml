@@ -89,19 +89,37 @@ void add_singleline_comment(const std::string& name, const boost::spirit::unused
 
 void add_property(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
 {
-    doxyqml::CProperty* p = new doxyqml::CProperty(name);
+    doxyqml::CProperty* p = new doxyqml::CProperty(name,false);
+    gRootObject.addChild(p);
+}
+
+void add_subProperty(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+{
+    doxyqml::CProperty* p = new doxyqml::CProperty(name,true);
     gRootObject.addChild(p);
 }
 
 void add_signal(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
 {
-    doxyqml::CSignal* p = new doxyqml::CSignal(name);
+    doxyqml::CSignal* p = new doxyqml::CSignal(name,false);
+    gRootObject.addChild(p);
+}
+
+void add_subSignal(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+{
+    doxyqml::CSignal* p = new doxyqml::CSignal(name,true);
     gRootObject.addChild(p);
 }
 
 void add_function(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
 {
-    doxyqml::CFunction* p = new doxyqml::CFunction(name);
+    doxyqml::CFunction* p = new doxyqml::CFunction(name,false);
+    gRootObject.addChild(p);
+}
+
+void add_subFunction(const std::string& name, const boost::spirit::unused_type& it, bool& pass)
+{
+    doxyqml::CFunction* p = new doxyqml::CFunction(name,true);
     gRootObject.addChild(p);
 }
 
@@ -186,9 +204,9 @@ struct qml_parser
                         
         subObjectElement   =   comment
                         |   onCompletionHandler
-                        |   -(qi::lit("readonly") >> space) >> -(qi::lit("default") >> space) >> property
-                        |   signal
-                        |   function
+                        |   -(qi::lit("readonly") >> space) >> -(qi::lit("default") >> space) >> property[add_subProperty]
+                        |   signal[add_subSignal]
+                        |   function[add_subFunction]
                         |   objectDeclaration
                         |   idText
                         |   slot
