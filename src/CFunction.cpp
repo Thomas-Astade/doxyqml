@@ -78,7 +78,12 @@ void doxyqml::CFunction::print() const
 	NOTIFY_FUNCTION_CALL(this, 5, "CFunction", "print", "", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CFunction/operations/operation_print/code.cpp]
 	//~~ void print() [CFunction] ~~
-	if (!m_internal)
+	if (m_internal)
+	{
+	    printf("///This is a private function.\n");
+	    printf("private: void %s;\n",m_CommentText.c_str());
+	}
+	else
 	{
 	    printf("public: void %s;\n",m_CommentText.c_str());
 	}

@@ -68,7 +68,7 @@ doxyqml::CProperty::CProperty(const std::string& comment, bool internal) :
 {
 	NOTIFY_CONSTRUCTOR(5, "CProperty", "const std::string& comment, bool internal")
 //[Package_doxyqml/Package_ast/classes/class_CProperty/operations/constructor/code.cpp]
-	//~~ CProperty(const std::string& comment) [CProperty] ~~
+	//~~ CProperty(const std::string& comment, bool internal) [CProperty] ~~
 	m_CommentText = trim(comment);
 //[EOF]
 }
@@ -78,7 +78,12 @@ void doxyqml::CProperty::print() const
 	NOTIFY_FUNCTION_CALL(this, 5, "CProperty", "print", "", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CProperty/operations/operation_print/code.cpp]
 	//~~ void print() [CProperty] ~~
-	if (!m_internal)
+	if (m_internal)
+	{
+	    printf("///Only for internal use.\n");
+	    printf("private: Q_PROPERTY(%s);\n",m_CommentText.c_str());
+	} 
+	else    
 	{
 	    printf("public: Q_PROPERTY(%s);\n",m_CommentText.c_str());
 	}     

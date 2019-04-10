@@ -68,7 +68,7 @@ doxyqml::CSignal::CSignal(const std::string& comment, bool internal) :
 {
 	NOTIFY_CONSTRUCTOR(5, "CSignal", "const std::string& comment, bool internal")
 //[Package_doxyqml/Package_ast/classes/class_CSignal/operations/constructor/code.cpp]
-	//~~ CProperty(const std::string& comment) [CProperty] ~~
+	//~~ CSignal(const std::string& comment, bool internal) [CSignal] ~~
 	m_CommentText = trim(comment);
 //[EOF]
 }
@@ -78,9 +78,13 @@ void doxyqml::CSignal::print() const
 	NOTIFY_FUNCTION_CALL(this, 5, "CSignal", "print", "", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CSignal/operations/operation_print/code.cpp]
 	//~~ void print() [CSignal] ~~
-	if (!m_internal)
+	if (m_internal)
 	{
-	    printf("Q_SIGNALS: %s;\n",m_CommentText.c_str());
+	    printf("private: Q_SIGNALS: %s;\n",m_CommentText.c_str());
+	} 
+	else
+	{
+	    printf("public: Q_SIGNALS: %s;\n",m_CommentText.c_str());
 	} 
 //[EOF]
 }

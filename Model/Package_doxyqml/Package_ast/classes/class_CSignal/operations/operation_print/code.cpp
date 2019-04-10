@@ -1,5 +1,9 @@
 //~~ void print() [CSignal] ~~
-if (!m_internal)
+if (m_internal)
 {
-    printf("Q_SIGNALS: %s;\n",m_CommentText.c_str());
+    printf("private: Q_SIGNALS: %s;\n",m_CommentText.c_str());
+} 
+else
+{
+    printf("public: Q_SIGNALS: %s;\n",m_CommentText.c_str());
 } 
