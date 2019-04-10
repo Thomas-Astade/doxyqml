@@ -234,7 +234,7 @@ struct qml_parser
         valueText           =   *(inCurlyBrackets | qi::lit('.') | (qi::char_ - qi::eol - qi::char_('}')))
                             ;
         
-        propertySetting     =   -(uppercaseIdentifier >> qi::lit('.'))
+        propertySetting     =   *(uppercaseIdentifier >> qi::lit('.'))
                             >>  qualifiedIdentifier
                             >>  space
                             >>  qi::lit(':')
