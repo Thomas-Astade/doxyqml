@@ -72,11 +72,11 @@ doxyqml::CMultilineComment::CMultilineComment(const std::string& comment) :
 //[EOF]
 }
 
-void doxyqml::CMultilineComment::print() const
+void doxyqml::CMultilineComment::print(bool hasComment) const
 {
-	NOTIFY_FUNCTION_CALL(this, 5, "CMultilineComment", "print", "", "void ")
+	NOTIFY_FUNCTION_CALL(this, 5, "CMultilineComment", "print", "bool hasComment", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CMultilineComment/operations/operation_print/code.cpp]
-	//~~ void print() [CMultilineComment] ~~
+	//~~ void print(bool hasComment) [CMultilineComment] ~~
 	printf("/*%s*/\n",m_CommentText.c_str());
 //[EOF]
 }

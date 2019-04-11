@@ -73,11 +73,11 @@ doxyqml::CSignal::CSignal(const std::string& comment, bool internal) :
 //[EOF]
 }
 
-void doxyqml::CSignal::print() const
+void doxyqml::CSignal::print(bool hasComment) const
 {
-	NOTIFY_FUNCTION_CALL(this, 5, "CSignal", "print", "", "void ")
+	NOTIFY_FUNCTION_CALL(this, 5, "CSignal", "print", "bool hasComment", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CSignal/operations/operation_print/code.cpp]
-	//~~ void print() [CSignal] ~~
+	//~~ void print(bool hasComment) [CSignal] ~~
 	if (m_internal)
 	{
 	    printf("private: Q_SIGNALS: %s;\n",m_CommentText.c_str());

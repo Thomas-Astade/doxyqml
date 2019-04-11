@@ -73,14 +73,15 @@ doxyqml::CFunction::CFunction(const std::string& comment, bool internal) :
 //[EOF]
 }
 
-void doxyqml::CFunction::print() const
+void doxyqml::CFunction::print(bool hasComment) const
 {
-	NOTIFY_FUNCTION_CALL(this, 5, "CFunction", "print", "", "void ")
+	NOTIFY_FUNCTION_CALL(this, 5, "CFunction", "print", "bool hasComment", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CFunction/operations/operation_print/code.cpp]
-	//~~ void print() [CFunction] ~~
+	//~~ void print(bool hasComment) [CFunction] ~~
 	if (m_internal)
 	{
-	    printf("///This is a private function.\n");
+	    if (!hasComment)
+	        printf("///This is a private function.\n");
 	    printf("private: void %s;\n",m_CommentText.c_str());
 	}
 	else

@@ -67,8 +67,9 @@ public:
 	CNamespaceImport(const std::string& filename, const std::string& namespaceName);
 
 /** @brief print the generated code to stdout
+@param hasComment info, if there is already comment for that object
 */
-	virtual void print() const;
+	virtual void print(bool hasComment) const;
 
 
 protected:

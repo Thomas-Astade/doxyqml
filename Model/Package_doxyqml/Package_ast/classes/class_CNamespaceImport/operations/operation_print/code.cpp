@@ -1,4 +1,4 @@
-//~~ void print() [CNamespaceImport] ~~
+//~~ void print(bool hasComment) [CNamespaceImport] ~~
 if ((m_NamespaceName+"::") == m_filename)
     printf("// ");
 

@@ -46,6 +46,9 @@ SUCH DAMAGE.
 
 #include "CQmlObject.h"	 // own header
 
+// Relation includes:
+#include "CMultilineComment.h"
+#include "CSinglelineComment.h"
 
 
 //****** Trace Macros ***************
@@ -78,13 +81,22 @@ void doxyqml::CQmlObject::addChild(CQmlObject* child)
 //[EOF]
 }
 
-void doxyqml::CQmlObject::print() const
+void doxyqml::CQmlObject::print(bool hasComment) const
 {
-	NOTIFY_FUNCTION_CALL(this, 5, "CQmlObject", "print", "", "void ")
+	NOTIFY_FUNCTION_CALL(this, 5, "CQmlObject", "print", "bool hasComment", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CQmlObject/operations/operation_print/code.cpp]
-	//~~ void print() [CQmlObject] ~~
+	//~~ void print(bool hasComment) [CQmlObject] ~~
+	std::vector<CQmlObject*>::const_iterator old = myChilds.end();
+	
+	
 	for (std::vector<CQmlObject*>::const_iterator it = myChilds.begin(); it != myChilds.end(); it++)
-	    (*it)->print();
+	{
+	    bool isDocumented = (old != myChilds.end()) && ((dynamic_cast<const CSinglelineComment*>(*old) != 0) || (dynamic_cast<const CMultilineComment*>(*old) != 0));
+	        
+	    (*it)->print(isDocumented);
+	    
+	    old = it;
+	}
 //[EOF]
 }
 
@@ -92,6 +104,7 @@ const std::string doxyqml::CQmlObject::trim(const std::string& s)
 {
 	NOTIFY_FUNCTION_CALL(this, 5, "CQmlObject", "trim", "const std::string& s", "const std::string ")
 //[Package_doxyqml/Package_ast/classes/class_CQmlObject/operations/operation_trim/code.cpp]
+	//~~ const std::string trim(const std::string& s) [CQmlObject] ~~
 	std::string::size_type first = s.find_first_not_of(" \n\t\r");
 	if( first == std::string::npos) {
 	  return std::string();

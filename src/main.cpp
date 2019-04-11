@@ -526,6 +526,6 @@ int main (int argc, char **argv)
 
         load(arguments.filename);
     }
-    gRootObject.print();
+    gRootObject.print(false);
     return 0;
 }

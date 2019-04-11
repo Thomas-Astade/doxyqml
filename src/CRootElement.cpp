@@ -48,8 +48,10 @@ SUCH DAMAGE.
 #include "CRootElement.h"	 // own header
 
 // Relation includes:
+#include "CMultilineComment.h"
 #include "CObjectDeclaration.h"
 #include "CQmlObject.h"
+#include "CSinglelineComment.h"
 
 
 //****** Trace Macros ***************
@@ -120,14 +122,14 @@ doxyqml::CRootElement::CRootElement() :
 //[EOF]
 }
 
-void doxyqml::CRootElement::print() const
+void doxyqml::CRootElement::print(bool hasComment) const
 {
-	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "print", "", "void ")
+	NOTIFY_FUNCTION_CALL(this, 5, "CRootElement", "print", "bool hasComment", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CRootElement/operations/operation_print/code.cpp]
-	//~~ void print() [CRootElement] ~~
+	//~~ void print(bool hasComment) [CRootElement] ~~
 	printf("namespace %s {\n",m_Namespace.c_str());
 	
-	CQmlObject::print();
+	CQmlObject::print(true);
 	
 	printf("class %s ",m_Classname.c_str());
 	
@@ -136,8 +138,16 @@ void doxyqml::CRootElement::print() const
 	    
 	printf(" {\n");
 	
+	std::vector<CQmlObject*>::const_iterator old = myMemberChilds.end();
+	
 	for (std::vector<CQmlObject*>::const_iterator it = myMemberChilds.begin(); it != myMemberChilds.end(); it++)
-	    (*it)->print();
+	{
+	    bool isDocumented = (old != myMemberChilds.end()) && ((dynamic_cast<const CSinglelineComment*>(*old) != 0) || (dynamic_cast<const CMultilineComment*>(*old) != 0));
+	        
+	    (*it)->print(isDocumented);
+	    
+	    old = it;
+	}
 	
 	printf("};\n");
 	printf("}\n");

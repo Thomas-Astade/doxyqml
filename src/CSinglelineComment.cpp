@@ -72,9 +72,9 @@ doxyqml::CSinglelineComment::CSinglelineComment(const std::string& comment) :
 //[EOF]
 }
 
-void doxyqml::CSinglelineComment::print() const
+void doxyqml::CSinglelineComment::print(bool hasComment) const
 {
-	NOTIFY_FUNCTION_CALL(this, 5, "CSinglelineComment", "print", "", "void ")
+	NOTIFY_FUNCTION_CALL(this, 5, "CSinglelineComment", "print", "bool hasComment", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CSinglelineComment/operations/operation_print/code.cpp]
 	//~~ void print() [CSinglelineComment] ~~
 	printf("//%s\n",m_CommentText.c_str());

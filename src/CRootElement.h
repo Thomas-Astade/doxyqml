@@ -87,8 +87,9 @@ public:
 	CRootElement();
 
 /** @brief print the generated code to stdout
+@param hasComment info, if there is already comment for that object
 */
-	virtual void print() const;
+	virtual void print(bool hasComment) const;
 
 /** @brief set the id of the curren sub item
 @param id the id of the item

@@ -84,13 +84,17 @@ doxyqml::CObjectDeclaration::CObjectDeclaration(const std::string& objectName) :
 //[EOF]
 }
 
-void doxyqml::CObjectDeclaration::print() const
+void doxyqml::CObjectDeclaration::print(bool hasComment) const
 {
-	NOTIFY_FUNCTION_CALL(this, 5, "CObjectDeclaration", "print", "", "void ")
+	NOTIFY_FUNCTION_CALL(this, 5, "CObjectDeclaration", "print", "bool hasComment", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CObjectDeclaration/operations/operation_print/code.cpp]
-	//~~ void print() [CObjectDeclaration] ~~
+	//~~ void print(bool hasComment) [CObjectDeclaration] ~~
+	if (!hasComment)
+	    printf("///This is a private object.\n");
+	    
 	if (m_id.empty())
 	{
+	    printf("///@todo give this object a meaningful id.\n");
 	    printf ("private: %s attr_%d;\n", m_ObjectName.c_str(),idCounter++);
 	}
 	else

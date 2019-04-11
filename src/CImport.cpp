@@ -72,11 +72,11 @@ doxyqml::CImport::CImport(const std::string& importLine) :
 //[EOF]
 }
 
-void doxyqml::CImport::print() const
+void doxyqml::CImport::print(bool hasComment) const
 {
-	NOTIFY_FUNCTION_CALL(this, 5, "CImport", "print", "", "void ")
+	NOTIFY_FUNCTION_CALL(this, 5, "CImport", "print", "bool hasComment", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CImport/operations/operation_print/code.cpp]
-	//~~ void print() [CImport] ~~
+	//~~ void print(bool hasComment) [CImport] ~~
 	printf("// import%s\n",m_ImportLineText.c_str());
 //[EOF]
 }

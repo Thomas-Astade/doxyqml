@@ -73,14 +73,15 @@ doxyqml::CProperty::CProperty(const std::string& comment, bool internal) :
 //[EOF]
 }
 
-void doxyqml::CProperty::print() const
+void doxyqml::CProperty::print(bool hasComment) const
 {
-	NOTIFY_FUNCTION_CALL(this, 5, "CProperty", "print", "", "void ")
+	NOTIFY_FUNCTION_CALL(this, 5, "CProperty", "print", "bool hasComment", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CProperty/operations/operation_print/code.cpp]
-	//~~ void print() [CProperty] ~~
+	//~~ void print(bool hasComment) [CProperty] ~~
 	if (m_internal)
 	{
-	    printf("///Only for internal use.\n");
+	    if (!hasComment)
+	        printf("///Only for internal use.\n");
 	    printf("private: Q_PROPERTY(%s);\n",m_CommentText.c_str());
 	} 
 	else    

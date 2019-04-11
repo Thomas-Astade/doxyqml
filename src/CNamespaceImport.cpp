@@ -101,11 +101,11 @@ doxyqml::CNamespaceImport::CNamespaceImport(const std::string& filename, const s
 //[EOF]
 }
 
-void doxyqml::CNamespaceImport::print() const
+void doxyqml::CNamespaceImport::print(bool hasComment) const
 {
-	NOTIFY_FUNCTION_CALL(this, 5, "CNamespaceImport", "print", "", "void ")
+	NOTIFY_FUNCTION_CALL(this, 5, "CNamespaceImport", "print", "bool hasComment", "void ")
 //[Package_doxyqml/Package_ast/classes/class_CNamespaceImport/operations/operation_print/code.cpp]
-	//~~ void print() [CNamespaceImport] ~~
+	//~~ void print(bool hasComment) [CNamespaceImport] ~~
 	if ((m_NamespaceName+"::") == m_filename)
 	    printf("// ");
 	

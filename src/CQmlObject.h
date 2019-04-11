@@ -65,8 +65,9 @@ public:
 	void addChild(CQmlObject* child);
 
 /** @brief print the generated code to stdout
+@param hasComment info, if there is already comment for that object
 */
-	virtual void print() const = 0;
+	virtual void print(bool hasComment) const = 0;
 
 /** @brief helper function tpo trimm a string
 @param s the sring to trim
