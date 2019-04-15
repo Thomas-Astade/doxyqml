@@ -192,7 +192,7 @@ struct qml_parser
                         
         objectElement   =   comment
                         |   onCompletionHandler
-                        |   -(qi::lit("readonly") >> space) >> -(qi::lit("default") >> space) >> property[add_property]
+                        |   (-(qi::lit("readonly") >> space) >> -(qi::lit("default") >> space) >> property[add_property])
                         |   signal[add_signal]
                         |   function[add_function]
                         |   objectDeclaration
@@ -204,7 +204,7 @@ struct qml_parser
                         
         subObjectElement   =   comment
                         |   onCompletionHandler
-                        |   -(qi::lit("readonly") >> space) >> -(qi::lit("default") >> space) >> property[add_subProperty]
+                        |   (-(qi::lit("readonly") >> space) >> -(qi::lit("default") >> space) >> property[add_subProperty])
                         |   signal[add_subSignal]
                         |   function[add_subFunction]
                         |   objectDeclaration
@@ -320,7 +320,7 @@ struct qml_parser
                             >>  uppercaseIdentifier[setNamespaceIdentifier]
                             ;
         
-        property            = object_property | single_line_property;
+        property            = object_property | functionProperty | single_line_property;
         
         tillEndOfLine       =  *(qi::char_ - qi::eol);
         
@@ -340,6 +340,17 @@ struct qml_parser
                             >>  qi::lit(':')
                             >>  space
                             >>  uppercaseIdentifier
+                            >>  space
+                            >>  inCurlyBrackets
+                            ;
+                           
+        functionProperty    =   qi::lit("property")
+                            >>  space
+                            >>  lowercaseIdentifier
+                            >>  qi::char_(" \t")
+                            >>  lowercaseIdentifier
+                            >>  space
+                            >>  qi::lit(':')
                             >>  space
                             >>  inCurlyBrackets
                             ;
@@ -372,6 +383,7 @@ struct qml_parser
     qi::rule<Iterator, std::string()> objectDeclaration;
     qi::rule<Iterator, std::string()> topObjectDeclaration;
     qi::rule<Iterator, std::string()> property;
+    qi::rule<Iterator, std::string()> functionProperty;
     qi::rule<Iterator, std::string()> single_line_property;
     qi::rule<Iterator, std::string()> object_property;
     qi::rule<Iterator, std::string()> signal;
