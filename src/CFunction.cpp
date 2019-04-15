@@ -80,9 +80,8 @@ void doxyqml::CFunction::print(bool hasComment) const
 	//~~ void print(bool hasComment) [CFunction] ~~
 	if (m_internal)
 	{
-	    if (!hasComment)
-	        printf("///This is a private function.\n");
-	    printf("private: void %s;\n",m_CommentText.c_str());
+	    if (hasComment)
+	        printf("private: void %s;\n",m_CommentText.c_str());
 	}
 	else
 	{
