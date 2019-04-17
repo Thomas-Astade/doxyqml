@@ -239,7 +239,7 @@ struct qml_parser
                             >>  space
                             >>  qi::lit(':')
                             >>  space
-                            >>  (valueText | objectDeclaration)
+                            >>  (arrayDeclare | valueText | objectDeclaration)
                             >>  space
                             >>  -qi::lit(';')
                             >> *(space >> qi::lit(':') >> tillEndOfLine)
@@ -280,15 +280,22 @@ struct qml_parser
         someText            =   qi::lit(' ') 
                             |   qi::lit('\n') 
                             |   qi::lit('\t')
-                            |   inCurlyBrackets
                             |   quotedText
+                            |   inCurlyBrackets
                             |   qi::alnum 
-                            |   qi::char_("^,.;:_<>|~!*§$%&/()=?[]'-\\") 
+                            |   qi::char_("^,.;:_<>|~!*[]§$%&/()=?'-\\") 
                             ;
                             
         inCurlyBrackets     =   qi::lit('{')
                             >>  *someText
                             >>  qi::lit('}')
+                            ;
+                            
+        arrayDeclare        =   qi::lit('[')
+                            >>  *(space >> objectDeclaration >> space >> qi::lit(','))
+                            >>  -(space >> objectDeclaration)
+                            >>  space
+                            >>  qi::lit(']')
                             ;
                             
         paramList           =   qi::char_('(')
@@ -391,6 +398,7 @@ struct qml_parser
     qi::rule<Iterator, std::string()> idText;
     qi::rule<Iterator, std::string()> valueText;
     qi::rule<Iterator> inCurlyBrackets;
+    qi::rule<Iterator> arrayDeclare;
     qi::rule<Iterator> propertySetting;
     qi::rule<Iterator> structPropertySetting;
     qi::rule<Iterator> slot;
